@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/static/fonts/geist/geist-regular.woff2') format('woff2'),
+    url('/static/fonts/geist/geist-regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/static/fonts/geist/geist-bold.woff2') format('woff2'),
+    url('/static/fonts/geist/geist-bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LucideIcons';
+  src: url(https://unpkg.com/lucide-static@latest/font/Lucide.ttf) format('truetype');
+}
+
+body {
+  font-family: 'Geist', sans-serif !important;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar:hover {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #222e05;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+/* ::-webkit-scrollbar-thumb:hover {
+  background: #4d6113;
+} */
+
+#search-bar.search-bar {
+  border: none !important;
+  outline: none !important;
+}

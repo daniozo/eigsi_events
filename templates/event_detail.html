@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex flex-col lg:flex-row flex-nowrap w-full h-full bg-white px-12 lg:p-0 lg:overflow-hidden gap-8 lg:gap-12">
+   <div class="flex flex-col w-full lg:w-1/3 lg:pl-14 pt-10 gap-4">
+      <div class="max-h-fit shadow-lg">
+         <img class="rounded-md w-full" src="https://picsum.photos/1250/800" alt="" />
+      </div>
+      <div class="">
+         <div class="inline-block px-2 py-1 bg-[#eaf89e] text-[#222e05] text-xs font-medium rounded">
+            {{event.get_event_type_display}}
+         </div>
+         {% if event.is_public %}
+         <div class="inline-block px-2 py-1 bg-[#eaf89e] text-[#222e05] text-xs font-medium rounded">Public</div>
+         {% else %}
+         <div class="inline-block px-2 py-1 bg-[#eaf89e] text-[#222e05] text-xs font-medium rounded">Privé</div>
+         {% endif %}
+      </div>
+   </div>
+   <div class="flex flex-col w-full lg:pr-20 lg:pt-10 bg-white lg:overflow-auto lg:flex-1">
+      <!-- Event Title -->
+      <h1 class="text-2xl lg:text-4xl mb-4 font-bold text-[#4d6113]">{{ event.title }}</h1>
+      <div class="flex flex-col text-sm gap-2 mb-5">
+         <!-- Event Date and Time -->
+         <div class="flex items-center space-x-1 gap-3">
+            <div class="border rounded-md p-2 flex items-center justify-center">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days">
+                  <path d="M8 2v4" />
+                  <path d="M16 2v4" />
+                  <rect width="18" height="18" x="3" y="4" rx="2" />
+                  <path d="M3 10h18" />
+                  <path d="M8 14h.01" />
+                  <path d="M12 14h.01" />
+                  <path d="M16 14h.01" />
+                  <path d="M8 18h.01" />
+                  <path d="M12 18h.01" />
+                  <path d="M16 18h.01" />
+               </svg>
+            </div>
+            <div class="flex flex-col gap-1">
+               <span class="font-bold text-[#4d6113]">{{ event.date|date:"d F Y" }}</span>
+               <span>{{ event.date|time }}</span>
+            </div>
+         </div>
+         <!-- Location -->
+         <div class="flex items-center space-x-1 gap-3">
+            <div class="border rounded-md p-2 flex items-center justify-center">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin">
+                  <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                  <circle cx="12" cy="10" r="3" />
+               </svg>
+            </div>
+            <div class="flex flex-col gap-1">
+               <span class="font-bold text-[#4d6113]">Adresse</span>
+               <span>{{ event.location }}</span>
+            </div>
+         </div>
+      </div>
+      <!--  Registration  -->
+      <div class="w-full my-5 p-1 rounded-2xl border">
+         <div class="flex flex-col gap-3 p-2 rounded-tl-xl rounded-tr-xl bg-[#eaf89e]">
+            <div class="text-sm font-bold text-gray-800">Inscription</div>
+         </div>
+         <div class="p-4 flex flex-row flex-nowrap items-center gap-3">
+            <div class="max-h-fit max-w-fit rounded-full p-2 bg-[#eaf89e]">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ticket">
+                  <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                  <path d="M13 5v2"/>
+                  <path d="M13 17v2"/>
+                  <path d="M13 11v2"/>
+               </svg>
+            </div>
+            <div class="flex flex-col gap-1">
+               {% if event.is_public %}
+               <div class="text-sm font-bold text-gray-800">Participer à l'évènement</div>
+               {% else %}
+               <div class="text-sm font-bold text-gray-800">Évènement privé</div>
+               {% endif %}
+               {% if event.is_public %}
+               <p class="text-sm text-gray-700">Cet évènement est ouvert à tous.</p>
+               {% else %}
+               <p class="text-sm text-gray-700">Connectez-vous pour vous inscrire à cet évènement.</p>
+               {% endif %}
+            </div>
+         </div>
+         <hr>
+         <div class="p-4 flex flex-col items-center">
+            {% if event.is_public %}
+            <p class="mb-3 text-left">Vous pouvez participer à cet évènement. Renseignez votre email pour vous inscrire. Vous recevrez un mail de confirmation de votre participation.</p>
+            <label
+               class="relative bg-white w-full flex flex-row items-center justify-center border py-2 px-2 rounded-2xl gap-2 focus-within:border-gray-300"
+               for="search-bar">
+               <input id="search-bar" placeholder="votre email ici"
+                  class="px-6 py-2 w-full rounded-md focus:border-none border-none flex-1 focus:outline-none outline-none bg-white">
+               <button
+                  class="w-auto px-6 py-3 bg-[#4d6113] text-[#fbfee7] border-[#4d6113] fill-white active:scale-95 duration-100 border will-change-transform overflow-hidden relative rounded-xl transition-all disabled:opacity-70">
+                  <div class="relative">
+                     <div
+                        class="flex items-center justify-center h-3 w-3 absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 transition-all">
+                        <svg class="opacity-0 animate-spin w-full h-full" xmlns="http://www.w3.org/2000/svg" fill="none"
+                           viewBox="0 0 24 24">
+                           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                              stroke-width="4"></circle>
+                           <path class="opacity-75" fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                           </path>
+                        </svg>
+                     </div>
+                     <div class="flex items-center transition-all opacity-1 valid:">
+                         <span
+                        class="text-sm font-semibold whitespace-nowrap truncate mx-auto">
+                           S'inscrire
+                         </span>
+                     </div>
+                  </div>
+               </button>
+            </label>
+            {% else %}
+            <p class="text-left">Cet évènement est privé. Connectez-vous pour vous inscrire.</p>
+            {% endif %}
+         </div>
+      </div>
+      <!-- Event Description -->
+      <div class="mt-4 mb-10">
+         <h2 class="text-base font-bold text-gray-800">Description</h2>
+         <p class="mt-2 text-left">{{ event.description }}</p>
+      </div>
+   </div>
+</div>
+{% endblock %}
