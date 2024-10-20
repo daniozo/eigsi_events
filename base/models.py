@@ -5,7 +5,7 @@ class Event(models.Model):
         ('conference', 'Conférence'),
         ('workshop', 'Atelier'),
         ('cultural', 'Culturel'),
-        ('iftar', 'Ftour'),
+        ('ftour', 'Ftour'),
         ('competition', 'Compétition'),
         ('charity', 'Caritatif'),
         ('talent_show', 'Eigsi Got Talent'),

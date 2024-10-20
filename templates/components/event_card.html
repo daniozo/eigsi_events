@@ -2,8 +2,10 @@
 
 <div class="flex flex-col justify-between min-h-[320px] transition-all card-shadow rounded-2xl border overflow-hidden bg-white">
   <!-- Event image -->
-  <div class="relative w-full min-h-[240px]">
-    <a href="{% url 'base:event_detail' event.id %}"><img class="relative w-full min-h-[240px] rounded-t-md" src="https://picsum.photos/1250/800" alt=""/></a>
+  <div class="relative w-full max-h-[240px]">
+    <a href="{% url 'base:event_detail' event.id %}">
+        <img class="relative w-full h-auto max-h-[240px] rounded-t-md" src="https://picsum.photos/1200/600" {# {% static 'images/eigsi_event_default_banner.png' %} #} alt=""/>
+    </a>
   </div>
 
   <div class="flex flex-col gap-2 p-5 justify-between">

@@ -1,28 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
 from .models import Event
 from .forms import EventForm
 import datetime
 
+now = datetime.datetime.now()
+
 def index(request):
-  return render(request, 'index.html')
-
-
-def events(request):
-    now = datetime.datetime.now()
-    start = 2016
-    year = now.year
-    event_type = ['Conférence', 'Atelier', 'Journée culturel', 'Ftour', 'Compétition', 'Caritatif', 'Eigsi Got Talent', 'Journée d\'intégration', 'Autres']
-
-    years = list(range(year, start - 1, -1))
-    events = Event.objects.all()
-
-    return render(request, 'events.html', {'events': events, 'nbr': range(len(events)), 'start': start, 'years': years, 'event_type': event_type})
+    events = Event.objects.filter(date__gte=timezone.now()).order_by('date')[:4]
+    return render(request, 'index.html', {'events': events})
 
 def search(request):
-    now = datetime.datetime.now()
     start = 2016
     year = now.year
-    event_type = ['Conférence', 'Atelier', 'Journée culturel', 'Ftour', 'Compétition', 'Caritatif', 'Eigsi Got Talent', 'Journée d\'intégration', 'Autres']
+    event_type = [
+        ('conference', 'Conférence'),
+        ('workshop', 'Atelier'),
+        ('cultural', 'Culturel'),
+        ('ftour', 'Ftour'),
+        ('competition', 'Compétition'),
+        ('charity', 'Caritatif'),
+        ('talent_show', 'Eigsi Got Talent'),
+        ('integration_day', 'Journée d\'intégration'),
+        ('other', 'Autres'),
+    ]
 
     years = list(range(year, start - 1, -1))
     events = Event.objects.all()

@@ -1,10 +1,69 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-  <div class="flex flex-col">
-    <div class="featuring-event flex items-center w-full h-auto mx-auto">
-        <div class="w-full h-72">
-            <img src="https://picsum.photos/1250/800" alt="">
+    <div class="w-full">
+        <div class="featuring-events">
+            <div class="flex items-center justify-center p-5 md:py-10">
+                <div class="carousel-container rounded-md relative lg:max-w-[960px] md:max-w-[720px] sm:max-w-[540px] overflow-hidden">
+                    <div class="carousel-track flex w-full">
+                        {% for event in events %}
+                            <div class="carousel-slide w-full">
+                                <a href="{% url 'base:event_detail' event.id %}"><img src="{% static 'images/img.png' %}" alt="Slide 1"></a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {# TODO: hide buttons if there is only one slide #}
+                    <button id="prevBtn"
+                            class="absolute flex items-center justify-center top-1/2 left-5 transform -translate-y-1/2 rounded-full p-1 md:p-2 border-none m-0 cursor-pointer z-10 bg-[#fbfee7] active:bg-[#c3e536] md:hover:bg-[#c3e536] opacity-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="#4d6113" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="">
+                            <path d="m15 18-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button id="nextBtn"
+                            class="absolute flex items-center justify-center top-1/2 right-5 transform -translate-y-1/2 rounded-full p-1 md:p-2 border-none m-0 cursor-pointer z-10 bg-[#fbfee7] active:bg-[#c3e536] md:hover:bg-[#c3e536] opacity-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="#222e05" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="hover:opacity-100">
+                            <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                    </button>
+                    {#<button id="pauseBtn">Pause</button>#}
+                </div>
+            </div>
+        </div>
+        <div class="p-12 sm:p-20">
+            <div class="flex flex-col items-start mb-8 md:mb-10">
+                <div class="flex flex-row flex-nowrap justify-between items-center w-full mb-6">
+                    <div class="inline-block text-lg sm:text-xl font-extrabold text-[#222e05] tracking-tight">
+                        Prochainement
+                    </div>
+                    <div class="text-base font-medium text-[#415215]">voir tout</div>
+                </div>
+                <ul class="grid w-full gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {% for event in events %}
+                        <li>
+                            {% include 'components/event_card.html' with event=event %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {#            {% include 'components/get_event_feedback.html' %}#}
+            <div class="flex flex-col items-start mb-8 md:mb-10">
+                <div class="flex flex-row flex-nowrap justify-between items-center w-full mb-6">
+                    <div class="inline-block text-lg sm:text-xl font-extrabold text-[#222e05] tracking-tight">
+                        (Re)Vivez les évènements passés
+                    </div>
+                    <div class="text-base font-medium text-[#415215]">voir plus</div>
+                </div>
+                <ul class="grid w-full gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {% for event in events %}
+                        <li>
+                            {% include 'components/event_card.html' with event=event %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-  </div>
 {% endblock %}

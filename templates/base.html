@@ -2,16 +2,62 @@
 <!DOCTYPE html>
 <html lang="fr">
    <head>
-      <title>Django Tailwind</title>
+      <title>Eigsi Event</title>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       {% tailwind_css %}
       <style>
          #loginModal {
-            display: none;
+         display: none;
          }
-      </style>
+
+         .featuring-events {
+             background-image: url("{% static 'images/eigsi_bg.png' %}");
+             background-repeat: no-repeat;
+             background-size: cover;
+             background-position: center;
+         }
+        .carousel-track {
+            transition: transform 0.5s ease;
+        }
+        .carousel-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            border: none;
+            margin: 0;
+            padding: 0 50px;
+            height: 100%;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #pauseBtn {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+    </style>
    </head>
    <body class="leading-normal tracking-normal bg-white">
       <header class="flex flex-row flex-nowrap w-full px-6 bg-white h-14 border-b border-color-subtle items-center">
@@ -34,10 +80,10 @@
                         <a class="md:p-4 py-3 px-0 block" href="{% url 'base:index' %}">Accueil</a>
                      </li>
                      <li>
-                        <a class="md:p-4 py-3 px-0 block" href="{% url 'base:events' %}">Évènements</a>
+                        <a class="md:p-4 py-3 px-0 block" href="{% url 'base:search' %}">Rechercher</a>
                      </li>
                      <li>
-                        <a class="md:p-4 py-3 px-0 block" href="{% url 'base:create_event' %}">Contact</a>
+                        <a class="md:p-4 py-3 px-0 block" href="{% url 'base:create_event' %}">Support</a>
                      </li>
                      <li>
                         <button id="openModalBtn" class="text-sm px-4 py-2 rounded-full bg-[#222e05] text-[#fbfee7] font-medium active:scale-95 duration-100 will-change">Connexion</button>
@@ -47,12 +93,11 @@
             </div>
          </div>
       </header>
-      <main class="flex flex-col md:flex-row m-0" style="height:calc(100dvh - 3.5rem);">
-         <div class="flex-grow overflow-y-auto relative">
+      <main class="flex flex-col md:flex-row m-0 w-full" style="height: calc(100dvh - 3.5rem);">
+         <div class="overflow-y-auto w-full">
             {% block content %}
             {% endblock %}
          </div>
-         <!-- Fenêtre modale de connexion -->
          <div id="loginModal" class="fixed inset-0 bg-backdrop backdrop-filter backdrop-blur-sm z-50 flex items-center justify-center px-6">
             <div class="h-auto overflow-hidden rounded-2xl bg-white shadow-2xl w-full max-w-md">
                <div class="h-14 flex items-center px-6">
@@ -67,6 +112,17 @@
                      <div class="text-3xl md:text-5xl tracking-tight font-bold text-color font-display">Connexion</div>
                   </div>
                   <div>
+                     <form class="space-y-6">
+                         <input class="form-control focus:border-[#222e05] border px-6 py-3 w-full rounded-full" type="email" placeholder="Entrer votre adresse mail (eigsica)" autocomplete="email">
+                        <button type="submit" class="px-6 py-3 rounded-full bg-[#222e05] active:scale-95 duration-100 will-change text-white w-full cursor-pointer">
+                            <span>Continuer</span>
+                        </button>
+                     </form>
+                     <div class="flex space-x-4 items-center my-6">
+                        <hr class="border border-color-subtle flex-grow">
+                        <div class="text-color-muted uppercase text-xs">ou</div>
+                        <hr class="border border-color-subtle flex-grow">
+                     </div>
                      <button class="px-6 py-3 rounded-full form-control border w-full flex items-center active:scale-95 duration-100 will-change justify-center space-x-2">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
@@ -77,20 +133,12 @@
                         </svg>
                         <span>Se connecter avec Google</span>
                      </button>
-                     <div class="flex space-x-4 items-center my-6">
-                        <hr class="border border-color-subtle flex-grow">
-                        <div class="text-color-muted uppercase text-xs">ou</div>
-                        <hr class="border border-color-subtle flex-grow">
-                     </div>
-                     <form class="space-y-6"><input class="form-control focus:border-[#222e05] border px-6 py-3 w-full rounded-full" type="email" placeholder="Entrer votre adresse mail (eigsica)" autocomplete="email">
-                        <button type="submit" class="px-6 py-3 rounded-full bg-[#222e05] text-white w-full cursor-pointer"><span>Continuer</span></button></form>
                   </div>
                </div>
             </div>
          </div>
       </main>
       <footer>
-
       </footer>
       <script>
          document.addEventListener("DOMContentLoaded", function () {
@@ -107,6 +155,8 @@
             });
          });
       </script>
-      <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+      <script src="{% static 'js/lib/alpinejs.js' %}" defer></script>
+      <script src="{% static 'js/src/filter.js' %}" defer></script>
+      <script src="{% static 'js/src/carrousel.js' %}" defer></script>
    </body>
 </html>
