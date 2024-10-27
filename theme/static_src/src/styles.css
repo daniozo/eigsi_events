@@ -3,47 +3,45 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/static/fonts/geist/geist-regular.woff2') format('woff2'),
+    font-family: 'Geist';
+    src: url('/static/fonts/geist/geist-regular.woff2') format('woff2'),
     url('/static/fonts/geist/geist-regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/static/fonts/geist/geist-bold.woff2') format('woff2'),
+    font-family: 'Geist';
+    src: url('/static/fonts/geist/geist-bold.woff2') format('woff2'),
     url('/static/fonts/geist/geist-bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
+    font-weight: bold;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'LucideIcons';
-  src: url(https://unpkg.com/lucide-static@latest/font/Lucide.ttf) format('truetype');
+    font-family: 'LucideIcons';
+    src: url(https://unpkg.com/lucide-static@latest/font/Lucide.ttf) format('truetype');
 }
 
 body {
-  font-family: 'Geist', sans-serif !important;
+    font-family: 'Geist', sans-serif !important;
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+    width: 5px;
+    height: 5px;
 }
 
-::-webkit-scrollbar:hover {
-  width: 10px;
-}
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #fff;
+    background: #fff;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #222e05;
-  border-radius: 5px;
+    background: #222e05;
+    border-radius: 5px;
 }
 
 /* Handle on hover */
@@ -52,6 +50,58 @@ body {
 } */
 
 #search-bar.search-bar {
-  border: none !important;
-  outline: none !important;
+    border: none !important;
+    outline: none !important;
+}
+
+
+@media (max-width: 767px) {
+    .recentActivitiesHidden {
+        --tw-translate-y: 100%;
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    }
+
+    .recentActivitiesShown {
+        --tw-translate-y: 0%;
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    }
+
+    #toggleFilterPanel:active {
+        color: #80a20e;
+    }
+
+    #toggleFilterPanel:active svg {
+        stroke: #80a20e;
+    }
+
+    [x-cloak] {
+  display: none !important;
+}
+
+
+    /*.filterPanelHidden {*/
+    /*    --tw-translate-x: 210px;*/
+    /*    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));*/
+    /*}*/
+    /*.filterPanelShown {*/
+    /*    --tw-translate-y: 0%;*/
+    /*    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));*/
+    /*}*/
+}
+
+@media (min-width: 768px) {
+    #toggleFilterPanel:hover svg {
+        stroke: #80a20e;
+    }
+}
+
+.toggleFilterPanelActive svg {
+    stroke: #80a20e;
+}
+
+.toggleFilterPanelActive {
+    padding: 0.25rem 0.5rem;
+    border: solid 1px #c3e536;
+    border-radius: 9999px;
+    color: #80a20e;
 }

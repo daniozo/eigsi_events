@@ -1,14 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
     <div class="w-full">
         <div class="featuring-events">
             <div class="flex items-center justify-center p-5 md:py-10">
-                <div class="carousel-container rounded-md relative lg:max-w-[960px] md:max-w-[720px] sm:max-w-[540px] overflow-hidden">
+                <div class="carousel-container rounded-md relative 2xl:max-w-[1200px] xl:max-w-[960px] lg:max-w-[720px] md:max-w-[540px] sm:max-w-[360px] overflow-hidden">
                     <div class="carousel-track flex w-full">
                         {% for event in events %}
                             <div class="carousel-slide w-full">
-                                <a href="{% url 'base:event_detail' event.id %}"><img src="{% static 'images/img.png' %}" alt="Slide 1"></a>
+                                <a href="{% url 'base:event_detail' event.id %}">
+                                    <img src="https://picsum.photos/1200/600"
+                                            {# {% static 'images/eigsi_event_default_banner.png' %} #} alt="Slide 1"/>
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
@@ -28,7 +31,7 @@
                             <path d="m9 18 6-6-6-6"/>
                         </svg>
                     </button>
-                    {#<button id="pauseBtn">Pause</button>#}
+                    {# <button id="pauseBtn">Pause</button> #}
                 </div>
             </div>
         </div>
@@ -48,22 +51,24 @@
                     {% endfor %}
                 </ul>
             </div>
-            {#            {% include 'components/get_event_feedback.html' %}#}
             <div class="flex flex-col items-start mb-8 md:mb-10">
                 <div class="flex flex-row flex-nowrap justify-between items-center w-full mb-6">
-                    <div class="inline-block text-lg sm:text-xl font-extrabold text-[#222e05] tracking-tight">
+                    <div class="inline-block text-base sm:text-xl font-extrabold text-[#222e05] tracking-tight">
                         (Re)Vivez les évènements passés
                     </div>
                     <div class="text-base font-medium text-[#415215]">voir plus</div>
                 </div>
-                <ul class="grid w-full gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {% for event in events %}
-                        <li>
-                            {% include 'components/event_card.html' with event=event %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                {#        <ul class="grid w-full gap-4 md:gap-6 sm:grid-cols-2">#}
+                {#          {% for event in events %}#}
+                {#            <li>#}
+                {#              {% include 'components/passed_event_card.html' with event=event %}#}
+                {#            </li>#}
+                {#          {% endfor %}#}
+                {#        </ul>#}
             </div>
         </div>
     </div>
+{% endblock %}
+{% block script_tags %}
+    <script src="{% static 'js/src/carrousel.js' %}" defer></script>
 {% endblock %}
