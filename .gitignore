@@ -16,3 +16,9 @@ node_modules/
 # VSCode, PyCharm, etc.
 *.vscode/
 .idea/
+
+# media
+media/posters/*
+!media/posters/.gitkeep
+media/galleries/*
+!media/galleries/.gitkeep

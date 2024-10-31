@@ -1,0 +1,148 @@
+{% load static %}
+<div id="generalTab" class="w-full flex flex-col gap-2 pt-3 pb-4">
+    {% if event.status is False %}
+        <div class="flex flex-row flex-nowrap items-center gap-2 border-l-4 bg-orange-100 border-orange-500 p-3  w-fit mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4"/>
+                <path d="M12 8h.01"/>
+            </svg>
+            <div class="text-sm">Cet évènement est en attente d'approbation</div>
+            <form method="POST" action="{% url 'dashboard:approve_event' event.id %}"
+                  class="d-inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="px-3 py-2 rounded-full bg-[#4d6113] hover:bg-[#617b10] active:scale-95 duration-100 will-change text-xs text-white">
+                    Approuver
+                </button>
+            </form>
+        </div>
+    {% endif %}
+    {% if event.archived_at %}
+        <div class="flex flex-col items-start bg-gray-100 border-gray-500 p-3 w-fit mb-5">
+            <div class="text-sm">Évènement archivé le {{ event.archived_at|date:"d M Y" }}</div>
+            <div class="text-sm">Désarchiver pour pouvoir y apporter des modifications</div>
+            <form method="POST" action="{% url 'dashboard:unarchive_event' event.id %}"
+                  class="d-inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="mt-1 px-3 py-2 rounded-full bg-[#4d6113] hover:bg-[#617b10] active:scale-95 duration-100 will-change text-xs text-white">
+                    Désarchiver
+                </button>
+            </form>
+        </div>
+    {% endif %}
+    <div class="w-[100%] md:w-[430px]">
+        <form id="event-form" method="POST" enctype="multipart/form-data"
+              class="flex flex-col gap-4">
+            {% csrf_token %}
+            <label for="pick-poster">
+                     <span class="flex flex-col gap-1">
+                        <span class="text-xs font-bold">Affiche</span>
+                        <div class="relative group rounded-lg {% if event.archived_at is None %}cursor-pointer{% endif %}">
+                           {% if event.poster %}
+                               <img id="poster-preview" src="{{ event.poster.url }}"
+                                    alt="{{ event.title }}" class="rounded-lg w-full">
+                           {% else %}
+                               <img id="poster-preview"
+                                    src="{% static 'images/eigsi_event_default_banner.png' %}"
+                                    alt="Affiche par défaut"
+                                    class="rounded-lg w-full">
+                           {% endif %}
+                            {% if event.archived_at is None %}
+                                <div class="absolute top-2 right-2 p-2 rounded-full bg-[#80a20e] hover:bg-[#617b10] text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a1c617]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="lucide lucide-pencil">
+                                        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                        <path d="m15 5 4 4"/>
+                                    </svg>
+                                </div>
+                            {% endif %}
+                        </div>
+                     </span>
+            </label>
+            <input id="pick-poster" class="w-0 h-0" type="file" name="poster" {% if event.archived_at %}
+                   disabled {% endif %}>
+            <label class="flex flex-col gap-1">
+                <span class="text-xs font-bold">Titre</span>
+                <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
+                       type="text" name="title" placeholder="Titre" value="{{ event.title }}"
+                       required {% if event.archived_at %}disabled{% endif %}>
+            </label>
+            <label class="flex flex-col gap-1">
+                <span class="text-xs font-bold">Lieu</span>
+                <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
+                       type="text" name="location" placeholder="Lieu" value="{{ event.location }}"
+                       required {% if event.archived_at %}disabled{% endif %}>
+            </label>
+            <label class="flex flex-col gap-1">
+                <span class="text-xs font-bold">Description</span>
+                <textarea id="description"
+                          class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm resize-none"
+                          name="description" placeholder="Description" rows="4"
+                          required {% if event.archived_at %}
+                          disabled {% endif %}>{{ event.description }}</textarea>
+            </label>
+            <label class="flex flex-col gap-1">
+                <span class="text-xs font-bold">Date et heure</span>
+                <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
+                       type="datetime-local" name="date" value="{{ event.date|date:'Y-m-d\TH:i' }}"
+                       required {% if event.archived_at %}disabled{% endif %}>
+            </label>
+            <label class="flex flex-col gap-1">
+                <span class="text-xs font-bold">Type d'évènement</span>
+                <select class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
+                        name="event_type" required {% if event.archived_at %}disabled{% endif %}>
+                    {% for value, label in event.EVENT_TYPE_CHOICES %}
+                        <option value="{{ value }}"
+                                {% if event.event_type == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="flex flex-row flex-nowrap items-center gap-3 text-sm text-[#415215] w-full">
+                <span class="text-xs font-bold">Public</span>
+                <input class="form-control border focus:border-[#a1c617] focus:ring-0 p-1 rounded-md {% if event.archived_at is None %}cursor-pointer{% endif %}"
+                       type="checkbox" name="is_public" {% if event.is_public %}checked{% endif %}
+                        {% if event.archived_at %}disabled{% endif %}>
+            </label>
+            {% if event.archived_at is None %}
+                <div class="flex flex-row flex-nowrap gap-2 w-full justify-end items-center">
+                    <button id="submit-btn" type="submit"
+                            class="px-3 py-2 rounded-full bg-[#4d6113] hover:bg-[#617b10] active:scale-95 duration-100 will-change text-xs text-white disabled:bg-gray-300 disabled:active:scale-100"
+                            disabled>
+                        Enregistrer les modifications
+                    </button>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+    {% if event.archived_at is None and event.status %}
+        <hr class="mt-6">
+        <div class="rounded-md border border-gray-200 p-3 w-fit my-5">
+            <div class="flex flex-col align-left">
+                <div class="flex flex-row flex-nowrap items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="lucide lucide-archive">
+                        <rect width="20" height="5" x="2" y="3" rx="1"/>
+                        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+                        <path d="M10 12h4"/>
+                    </svg>
+                    <span class="text-sm font-bold">Archiver l'événement</span>
+                </div>
+                <div class="text-sm mt-1">Une fois archivé, l'événement ne sera plus visible par les visiteurs.</div>
+            </div>
+            <form method="POST" action="{% url 'dashboard:archive_event' event.id %}"
+                  class="d-inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="mt-2 px-2 py-1 rounded-md border border-red-300 bg-red-100 text-red-500 hover:bg-red-200 active:scale-95 duration-100 will-change text-sm font-medium">
+                    Archiver
+                </button>
+            </form>
+        </div>
+    {% endif %}
+</div>

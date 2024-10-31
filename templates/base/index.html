@@ -9,8 +9,7 @@
                         {% for event in events %}
                             <div class="carousel-slide w-full">
                                 <a href="{% url 'base:event_detail' event.id %}">
-                                    <img src="https://picsum.photos/1200/600"
-                                            {# {% static 'images/eigsi_event_default_banner.png' %} #} alt="Slide 1"/>
+                                    <img src="{{ event.poster.url }}" alt="{{ event.title }}"/>
                                 </a>
                             </div>
                         {% endfor %}

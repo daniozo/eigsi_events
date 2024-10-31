@@ -1,0 +1,41 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+{% block content %}
+    <div class="w-full h-full overflow-hidden">
+        <div class="flex-1 flex flex-col h-full">
+            <div class="flex flex-col w-full gap-1 md:gap-2 mb-2 px-6 pt-4 md:px-8 md:pt-6">
+                <div class="w-full text-xs flex flex-row flex-nowrap gap-1 items-center line-clamp-1 overflow-ellipsis">
+                    <a href="{% url 'dashboard:events' %}" class="text-[#a1c617] hover:underline">Évènements</a>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"
+                         class="lucide lucide-chevron-right">
+                        <path d="m9 18 6-6-6-6"/>
+                    </svg>
+                    <div class="w-full line-clamp-1 overflow-ellipsis">{{ event.title }}</div>
+                </div>
+                <div id="tab-bar"
+                     class="relative w-full flex flex-row flex-nowrap items-center text-sm border-b select-none">
+                    <div id="generalTabBtn" class="px-2 py-1 rounded hover:bg-[#f5fccb] cursor-pointer">Général</div>
+                    <div id="galleryTabBtn" class="px-2 py-1 rounded hover:bg-[#f5fccb] cursor-pointer">Galerie</div>
+                    <div id="statsTabBtn" class="px-2 py-1 rounded hover:bg-[#f5fccb] cursor-pointer">Stats</div>
+                    <div id="slider"
+                         class="absolute h-[2px] bottom-[-1px] bg-[#a1c617] transition-all ease-in-out duration-300"></div>
+                </div>
+            </div>
+            <div class="h-full overflow-hidden">
+                <div class="h-full overflow-y-auto px-6 pb-6 md:px-8 md:pb-8">
+                    {# general tab #}
+                    {% include 'dashboard/event_settings/general_tab.html' with event=event %}
+                    {# gallery tab #}
+                    {% include 'dashboard/event_settings/gallery_tab.html' with event=event %}
+                    {# stats tab #}
+                    {% include 'dashboard/event_settings/stats_tab.html' with event=event %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script_tags %}
+    <script src="{% static 'js/src/event_settings_scripts.js' %}"></script>
+    <script src="{% static 'js/src/filter.js' %}" defer></script>
+{% endblock %}

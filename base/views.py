@@ -3,13 +3,14 @@ from django.utils import timezone
 
 from dashboard.forms import NewEventForm
 from dashboard.models import Event
-import datetime
 
-now = datetime.datetime.now()
+now = timezone.now()
+
 
 def index(request):
-    events = Event.objects.filter(date__gte=timezone.now()).order_by('date')[:4]
+    events = Event.objects.filter(date__gte=now, archived_at=None).order_by('date')[:4]
     return render(request, 'base/index.html', {'events': events})
+
 
 def search(request):
     start = 2016
@@ -27,17 +28,23 @@ def search(request):
     ]
 
     years = list(range(year, start - 1, -1))
-    events = Event.objects.all()
+    events = Event.objects.filter(status=True, archived_at=None).order_by('date')
 
-    return render(request, 'base/search.html', {'events': events, 'nbr': range(len(events)), 'start': start, 'years': years, 'event_type': event_type})
+    has_events = len(events) != 0
+
+    context = {'has_events': has_events, 'events': events, 'start': start, 'years': years,
+               'event_type': event_type}
+
+    return render(request, 'base/search.html', context)
+
 
 def event_detail(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     return render(request, 'base/event_detail.html', {'event': event})
 
+
 def create_event(request):
     if request.method == 'POST':
-        print("\n\n\nPOST !!!!\n\n\n")
         form = NewEventForm(request.POST)
         if form.is_valid():
             form.save()
