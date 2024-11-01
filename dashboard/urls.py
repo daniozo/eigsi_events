@@ -13,6 +13,5 @@ urlpatterns = [
     path('events/<int:event_id>/gallery/add/', add_gallery_images, name='add_gallery_images'),
     path('gallery/image/<int:image_id>/delete/', delete_gallery_image, name='delete_gallery_image'),
     path("users/", users, name="users"),
-    path('chat/', chat, name='chat'),
     path("dashboard/", dashboard, name="dashboard"),
 ]
