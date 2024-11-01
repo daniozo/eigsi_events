@@ -115,9 +115,8 @@
                             </div>
                         </a>
                     </li>
-                    {# display this only if current user is super admin #}
                     <li class="hover:bg-[#eaf89e] text-[#222e05] rounded-md">
-                        <a href="#" class="hover:bg-[#d8f165] text-[#222e05]">
+                        <a href="{% url 'dashboard:users' %}" class="hover:bg-[#d8f165] text-[#222e05]">
                             <div class="flex flex-row items-center gap-4 px-4 py-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

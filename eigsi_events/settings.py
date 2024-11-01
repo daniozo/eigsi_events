@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "theme",
     "dashboard",
+    "channels",
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -60,6 +61,7 @@ TAILWIND_APP_NAME = 'theme'
 # SITE_ID = 1
 SITE_ID = 2
 
+LOGIN_URL = 'auth'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -99,6 +101,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+ASGI_APPLICATION = "eigsi_events.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 

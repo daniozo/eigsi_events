@@ -10,7 +10,8 @@
                 <path d="M12 8h.01"/>
             </svg>
             <div class="text-sm">Cet évènement est en attente d'approbation</div>
-            <form method="POST" action="{% url 'dashboard:approve_event' event.id %}"
+            {% if is_super_admin %}
+            	<form method="POST" action="{% url 'dashboard:approve_event' event.id %}"
                   class="d-inline">
                 {% csrf_token %}
                 <button type="submit"
@@ -18,6 +19,7 @@
                     Approuver
                 </button>
             </form>
+            {% endif %}
         </div>
     {% endif %}
     {% if event.archived_at %}

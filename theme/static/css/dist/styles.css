@@ -964,6 +964,10 @@ select {
   margin-left: 0.5rem;
 }
 
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
 .ml-4 {
   margin-left: 1rem;
 }
@@ -982,6 +986,10 @@ select {
 
 .mr-4 {
   margin-right: 1rem;
+}
+
+.mr-6 {
+  margin-right: 1.5rem;
 }
 
 .mr-8 {
@@ -1102,6 +1110,10 @@ select {
   height: 2px;
 }
 
+.h-\[70\%\] {
+  height: 70%;
+}
+
 .h-auto {
   height: auto;
 }
@@ -1184,6 +1196,10 @@ select {
   width: 100%;
 }
 
+.w-\[350px\] {
+  width: 350px;
+}
+
 .w-auto {
   width: auto;
 }
@@ -1207,6 +1223,10 @@ select {
 
 .max-w-7xl {
   max-width: 80rem;
+}
+
+.max-w-\[300px\] {
+  max-width: 300px;
 }
 
 .max-w-fit {
@@ -1645,9 +1665,19 @@ select {
   background-color: rgb(254 243 199 / var(--tw-bg-opacity));
 }
 
+.bg-amber-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 230 138 / var(--tw-bg-opacity));
+}
+
 .bg-blue-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+}
+
+.bg-blue-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity));
 }
 
 .bg-blue-500 {
@@ -2392,6 +2422,11 @@ body {
   border-radius: 0.25rem;
 }
 
+.hover\:border-\[\#80a20e\]:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(128 162 14 / var(--tw-border-opacity));
+}
+
 .hover\:border-\[\#a1c617\]:hover {
   --tw-border-opacity: 1;
   border-color: rgb(161 198 23 / var(--tw-border-opacity));
@@ -2400,6 +2435,11 @@ body {
 .hover\:bg-\[\#617b10\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(97 123 16 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-\[\#80a20e\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(128 162 14 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-\[\#c3e536\]:hover {
@@ -2576,6 +2616,10 @@ body {
 .focus\:ring-red-500:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(239 68 68 / var(--tw-ring-opacity));
+}
+
+.focus\:ring-offset-0:focus {
+  --tw-ring-offset-width: 0px;
 }
 
 .focus\:ring-offset-2:focus {
@@ -2876,11 +2920,6 @@ body {
 
   .md\:hover\:bg-transparent:hover {
     background-color: transparent;
-  }
-
-  .md\:hover\:text-\[\#80a20e\]:hover {
-    --tw-text-opacity: 1;
-    color: rgb(128 162 14 / var(--tw-text-opacity));
   }
 
   .md\:hover\:text-blue-700:hover {

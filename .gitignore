@@ -22,3 +22,6 @@ media/posters/*
 !media/posters/.gitkeep
 media/galleries/*
 !media/galleries/.gitkeep
+
+#chatbot
+db/*

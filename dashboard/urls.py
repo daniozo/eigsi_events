@@ -10,8 +10,9 @@ urlpatterns = [
     path('events/<int:event_id>/approve/', approve_event, name='approve_event'),
     path('events/<int:event_id>/archive/', archive_event, name='archive_event'),
     path('events/<int:event_id>/unarchive/', unarchive_event, name='unarchive_event'),
-
     path('events/<int:event_id>/gallery/add/', add_gallery_images, name='add_gallery_images'),
     path('gallery/image/<int:image_id>/delete/', delete_gallery_image, name='delete_gallery_image'),
+    path("users/", users, name="users"),
+    path('chat/', chat, name='chat'),
     path("dashboard/", dashboard, name="dashboard"),
 ]

@@ -155,6 +155,7 @@
 
 </div>
 {% endif %}
+{% if not user.is_authenticated %}
 <div id="loginModal"
      class="fixed inset-0 bg-backdrop backdrop-filter backdrop-blur-sm z-50 flex items-center justify-center px-6">
     <div class="h-auto overflow-hidden rounded-2xl bg-white shadow-2xl w-full max-w-md">
@@ -209,6 +210,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 <main class="flex flex-col md:flex-row m-0 w-full" style="height: calc(100dvh - 3.5rem);">
     <div class="overflow-y-auto w-full">
         {% block content %}
@@ -217,6 +219,7 @@
 </main>
 <footer>
 </footer>
+{% if not user.is_authenticated %}
 <script>
    document.addEventListener("DOMContentLoaded", () => {
       const loginModal = document.getElementById("loginModal");
@@ -228,6 +231,7 @@
       });
    });
 </script>
+{% endif %}
 <script>
    document.addEventListener("DOMContentLoaded", function () {
       const openProfileModal = document.getElementById("openProfileModal");
