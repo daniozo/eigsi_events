@@ -78,11 +78,16 @@
     <div class="flex flex-col w-full h-full overflow-hidden">
         <div class="flex flex-row flex-nowrap h-full overflow-hidden">
             <aside class="hidden md:flex flex-col m-0 p-3 border-r h-full select-none">
-                <ul class="flex flex-col gap-1 bg-white">
-                    <li class="hover:bg-[#eaf89e] text-[#222e05] rounded-md">
-                        <a href="{% url 'dashboard:index' %}" class="hover:bg-[#d8f165] text-[#222e05]">
-                            <div class="flex flex-row items-center gap-4 px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                <ul class="nav-link flex flex-col gap-1 bg-white">
+                    {% url 'dashboard:index' as dashboard_url %}
+                    {% url 'dashboard:events' as events_url %}
+                    {% url 'dashboard:users' as users_url %}
+                    {% url 'report' as report_url %}
+                    {% url 'settings' as settings_url %}
+                    <li class="{% if request.path == dashboard_url %}bg-[#d8f165]{% endif %} {% if request.path != dashboard_url %}hover:bg-[#eaf89e]{% endif %} text-[#222e05] rounded-md">
+                        <a href="{{ dashboard_url }}">
+                            <div class="flex flex-row items-center gap-4 px-4 py-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="lucide lucide-square-kanban">
                                     <rect width="18" height="18" x="3" y="3" rx="2"/>
@@ -94,10 +99,10 @@
                             </div>
                         </a>
                     </li>
-                    <li class="hover:bg-[#eaf89e] text-[#222e05] rounded-md">
-                        <a href="{% url 'dashboard:events' %}" class="hover:bg-[#d8f165] text-[#222e05]">
-                            <div class="flex flex-row items-center gap-4 px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    <li class="{% if request.path == events_url %}bg-[#d8f165]{% endif %} {% if request.path != events_url %}hover:bg-[#eaf89e]{% endif %} text-[#222e05] rounded-md">
+                        <a href="{{ events_url }}">
+                            <div class="flex flex-row items-center gap-4 px-4 py-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="lucide lucide-calendar-days">
                                     <path d="M8 2v4"/>
@@ -115,10 +120,10 @@
                             </div>
                         </a>
                     </li>
-                    <li class="hover:bg-[#eaf89e] text-[#222e05] rounded-md">
-                        <a href="{% url 'dashboard:users' %}" class="hover:bg-[#d8f165] text-[#222e05]">
-                            <div class="flex flex-row items-center gap-4 px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    <li class="{% if request.path == users_url %}bg-[#d8f165]{% endif %} {% if request.path != users_url %}hover:bg-[#eaf89e]{% endif %} text-[#222e05] rounded-md">
+                        <a href="{{ users_url }}">
+                            <div class="flex flex-row items-center gap-4 px-4 py-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="lucide lucide-users">
                                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
@@ -130,10 +135,10 @@
                             </div>
                         </a>
                     </li>
-                    <li class="hover:bg-[#eaf89e] text-[#222e05] rounded-md">
-                        <a href="#" class="hover:bg-[#d8f165] text-[#222e05]">
-                            <div class="flex flex-row items-center gap-4 px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    <li class="{% if request.path == report_url %}bg-[#d8f165]{% endif %} {% if request.path != report_url %}hover:bg-[#eaf89e]{% endif %} text-[#222e05] rounded-md">
+                        <a href="{{ report_url }}">
+                            <div class="flex flex-row items-center gap-4 px-4 py-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="lucide lucide-clipboard-minus">
                                     <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
@@ -143,10 +148,10 @@
                             </div>
                         </a>
                     </li>
-                    <li class="hover:bg-[#eaf89e] text-[#222e05] rounded-md">
-                        <a href="{% url 'dashboard:dashboard' %}" class="hover:bg-[#d8f165] text-[#222e05]">
+                    <li class="{% if request.path == settings_url %}bg-[#d8f165]{% endif %} {% if request.path != settings_url %}hover:bg-[#eaf89e]{% endif %} text-[#222e05] rounded-md">
+                        <a href="{% url 'dashboard:index' %}">
                             <div class="flex flex-row items-center gap-4 px-4 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="lucide lucide-settings">
                                     <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
@@ -221,7 +226,7 @@
                     </a>
                 </li>
                 <li class="hover:bg-[#eaf89e] text-[#222e05] rounded">
-                    <a href="{% url 'dashboard:dashboard' %}" class="hover:bg-[#d8f165] text-[#222e05]">
+                    <a href="{% url 'dashboard:index' %}" class="hover:bg-[#d8f165] text-[#222e05]">
                         <div class="flex flex-row items-center gap-4 px-4 py-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -254,6 +259,10 @@
       profileModal.addEventListener('click', function (e) {
          e.stopPropagation();
       });
+   });
+</script>
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
    });
 </script>
 <script src="{% static 'js/lib/alpine.min.js' %}"></script>

@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-1 bg-[#f5fccb] w-full p-2">
+    <div class="w-full flex flex-row flex-nowrap justify-between items-center text-[#415215]">
+        <div class="text-xs font-bold overflow-ellipsis">
+            {% for key, value in operation_type_titles %}
+                {% if key == operation.type %}
+                    {{ value }}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="text-xs">
+            {% if operation.date_time|date == now|date %}
+                {{ operation.date_time|time:"H:i" }}
+            {% else %}
+                {{ operation.date_time|date:"d/m/y" }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="text-sm text-[#222e05] line-clamp-2">
+        {% if operation.content_object %}
+            {% if operation.content_type.model == 'event' %}
+                {{ operation.content_object.title }}
+            {% elif operation.content_type.model == 'user' %}
+                {{ operation.content_object.username }}
+            {% endif %}
+        {% elif operation.content_title %}
+            {{ operation.content_title }}
+        {% endif %}
+    </div>
+</div>

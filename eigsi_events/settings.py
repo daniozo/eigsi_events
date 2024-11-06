@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "daphne",
     "django.contrib.staticfiles",
     'django.contrib.sites',
     'allauth',
@@ -58,8 +59,7 @@ INSTALLED_APPS = [
 
 TAILWIND_APP_NAME = 'theme'
 
-# SITE_ID = 1
-SITE_ID = 2
+SITE_ID = 4
 
 LOGIN_URL = 'auth'
 LOGIN_REDIRECT_URL = '/'
@@ -106,7 +106,7 @@ ASGI_APPLICATION = "eigsi_events.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     }
 }
 
@@ -180,12 +180,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "fr-fr"
 
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
+TIME_ZONE = 'Africa/Casablanca'
 USE_TZ = True
 
+USE_I18N = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

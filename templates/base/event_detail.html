@@ -62,73 +62,174 @@
                 </div>
             </div>
             <!--  Registration  -->
-            <div class="w-full my-5 p-1 rounded-2xl border">
-                <div class="flex flex-col gap-3 p-2 rounded-tl-xl rounded-tr-xl bg-[#eaf89e]">
-                    <div class="text-sm font-bold text-gray-800">Inscription</div>
-                </div>
-                <div class="p-4 flex flex-row flex-nowrap items-center gap-3">
-                    <div class="max-h-fit max-w-fit rounded-full p-2 bg-[#eaf89e]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                             class="lucide lucide-ticket">
-                            <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
-                            <path d="M13 5v2"/>
-                            <path d="M13 17v2"/>
-                            <path d="M13 11v2"/>
-                        </svg>
+            {% if event.date > now %}
+                <section class="w-full my-5 p-1 rounded-2xl border">
+                    <div class="flex flex-col gap-3 p-2 rounded-tl-xl rounded-tr-xl bg-[#eaf89e]">
+                        <div class="text-sm font-bold text-gray-800">Inscription</div>
                     </div>
-                    <div class="flex flex-col gap-1">
-                        {% if event.is_public %}
-                            <div class="text-sm font-bold text-gray-800">Participer à l'évènement</div>
-                        {% else %}
-                            <div class="text-sm font-bold text-gray-800">Évènement privé</div>
-                        {% endif %}
-                        {% if event.is_public %}
-                            <p class="text-sm text-gray-700">Cet évènement est ouvert à tous.</p>
-                        {% else %}
-                            <p class="text-sm text-gray-700">Connectez-vous pour vous inscrire à cet évènement.</p>
-                        {% endif %}
+                    <div class="p-4 flex flex-row flex-nowrap items-center gap-3">
+                        <div class="max-h-fit max-w-fit rounded-full p-2 bg-[#eaf89e]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-ticket">
+                                <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                                <path d="M13 5v2"/>
+                                <path d="M13 17v2"/>
+                                <path d="M13 11v2"/>
+                            </svg>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            {% if event.is_public %}
+                                <div class="text-sm font-bold text-gray-800">Participer à l'évènement</div>
+                            {% else %}
+                                <div class="text-sm font-bold text-gray-800">Évènement privé</div>
+                            {% endif %}
+                            {% if event.is_public %}
+                                <p class="text-sm text-gray-700">Cet évènement est ouvert à tous.</p>
+                            {% else %}
+                                <p class="text-sm text-gray-700">Connectez-vous pour vous inscrire à cet évènement.</p>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <hr>
-                <div class="p-4 flex flex-col items-center">
-                    {% if event.is_public %}
-                        <p class="mb-3 text-left">Vous pouvez participer à cet évènement. Renseignez votre email pour
-                            vous inscrire. Vous recevrez un mail de confirmation de votre participation.</p>
-                        <label
-                                class="relative bg-white w-full flex flex-row items-center justify-center border py-2 px-2 rounded-2xl gap-2 focus-within:border-gray-300"
-                                for="search-bar">
-                            <input id="search-bar" placeholder="votre email ici"
-                                   class="px-6 py-2 w-full rounded-md focus:border-none border-none flex-1 focus:outline-none outline-none bg-white">
-                            <button
-                                    class="w-auto px-6 py-3 bg-[#4d6113] text-[#fbfee7] border-[#4d6113] fill-white active:scale-95 duration-100 border will-change-transform overflow-hidden relative rounded-xl transition-all disabled:opacity-70">
-                                <div class="relative">
-                                    <div
-                                            class="flex items-center justify-center h-3 w-3 absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 transition-all">
-                                        <svg class="opacity-0 animate-spin w-full h-full"
-                                             xmlns="http://www.w3.org/2000/svg" fill="none"
-                                             viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                                    stroke-width="4"></circle>
-                                            <path class="opacity-75" fill="currentColor"
-                                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="flex items-center transition-all opacity-1 valid:">
+                    <hr>
+                    <div class="p-4 flex flex-col items-center">
+                        {% if event.is_public %}
+                            <p class="mb-3 text-left">Vous pouvez participer à cet évènement. Renseignez votre email
+                                pour
+                                vous inscrire. Vous recevrez un mail de confirmation de votre participation.</p>
+                            <label
+                                    class="relative bg-white w-full flex flex-row items-center justify-center border py-2 px-2 rounded-2xl gap-2 focus-within:border-gray-300"
+                                    for="search-bar">
+                                <input id="search-bar" placeholder="votre email ici"
+                                       class="px-6 py-2 w-full rounded-md focus:border-none border-none flex-1 focus:outline-none outline-none bg-white">
+                                <button
+                                        class="w-auto px-6 py-3 bg-[#4d6113] text-[#fbfee7] border-[#4d6113] fill-white active:scale-95 duration-100 border will-change-transform overflow-hidden relative rounded-xl transition-all disabled:opacity-70">
+                                    <div class="relative">
+                                        <div
+                                                class="flex items-center justify-center h-3 w-3 absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 transition-all">
+                                            <svg class="opacity-0 animate-spin w-full h-full"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                        stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex items-center transition-all opacity-1 valid:">
                          <span
                                  class="text-sm font-semibold whitespace-nowrap truncate mx-auto">
                            S'inscrire
                          </span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </label>
+                        {% else %}
+                            <p class="text-left">Cet évènement est privé. Connectez-vous pour vous inscrire.</p>
+                        {% endif %}
+                    </div>
+                </section>
+            {% endif %}
+            <!-- Gallery -->
+            {% if event.date < now and event.gallery.all|length > 0 %}
+                <section class="mt-8 w-full my-5 p-1 rounded-2xl border">
+                    <div class="flex flex-col gap-3 p-2 rounded-tl-xl rounded-tr-xl bg-[#eaf89e]">
+                        <div class="text-sm font-bold text-gray-800">(Re)Vivez l'évènement</div>
+                    </div>
+                        <div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {% for image in event.gallery.all|slice:":8" %}
+                                <div class="relative aspect-square cursor-pointer gallery-image"
+                                     data-index="{{ forloop.counter0 }}">
+                                    <img src="{{ image.image.url }}"
+                                         alt="{{ image.caption }}"
+                                         class="w-full max-h-24 object-cover rounded">
+                                    {% if forloop.counter == 8 and event.gallery.all|length > 8 %}
+                                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded">
+                                            <span class="text-white text-xl font-bold">+{{ event.gallery.all|length|add:"-8" }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Carrousel Modal -->
+                        <div id="carousel-modal"
+                             class="fixed top-0 left-0 bottom-0 hidden right-0 w-full h-full inset-0 z-50">
+                            <div class="w-full h-full relative">
+                                <div class="absolute w-full h-full inset-0 bg-black bg-opacity-85"></div>
+                                <div class="relative w-full h-full bg-transparent flex flex-col items-center p-4">
+                                    <div class="w-full text-white z-10 flex flex-row justify-between items-center mb-4 px-3">
+                                        <div class="text-base font-bold">Galerie</div>
+                                        <div class=""><span class="current-slide">1</span>/<span
+                                                class="total-slides">{{ event.gallery.all|length }}</span>
+                                        </div>
+                                        <button id="close-carousel"
+                                                class=" cursor-pointer active:scale-75 duration-100 will-change text-color-muted">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 viewBox="0 0 24 24"
+                                                 fill="none"
+                                                 stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                                 stroke-linejoin="round"
+                                                 class="lucide lucide-x">
+                                                <path d="M18 6 6 18"/>
+                                                <path d="m6 6 12 12"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex-1 w-full h-full flex items-center justify-center relative overflow-hidden">
+                                        <div class="carousel-container h-full flex items-center overflow-hidden">
+                                            <div class="carousel-track flex">
+                                                {% for image in event.gallery.all %}
+                                                    <div class="carousel-slide flex items-center justify-center flex-none w-full">
+                                                        <div class="max-w-4xl mx-auto rounded">
+                                                            <img src="{{ image.image.url }}"
+                                                                 alt=""
+                                                                 class="h-auto max-h-[70vh] w-auto object-contain rounded">
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <button id="prevBtn" class="absolute left-4 text-white">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor"
+                                                     viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          stroke-width="2"
+                                                          d="M15 19l-7-7 7-7"/>
+                                                </svg>
+                                            </button>
+                                            <button id="nextBtn" class="absolute right-4 text-white">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor"
+                                                     viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          stroke-width="2"
+                                                          d="M9 5l7 7-7 7"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Thumbnails -->
+                                    <div class="w-fit overflow-x-auto mt-4 pb-1">
+                                        <div class="flex gap-2">
+                                            {% for image in event.gallery.all %}
+                                                <div class="thumbnail w-24 h-16 flex-shrink-0 cursor-pointer"
+                                                     data-index="{{ forloop.counter0 }}">
+                                                    <img src="{{ image.image.url }}"
+                                                         alt=""
+                                                         class="w-full h-full object-cover rounded">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 </div>
-                            </button>
-                        </label>
-                    {% else %}
-                        <p class="text-left">Cet évènement est privé. Connectez-vous pour vous inscrire.</p>
-                    {% endif %}
-                </div>
-            </div>
+                            </div>
+                        </div>
+                </section>
+            {% endif %}
             <!-- Event Description -->
             <div class="mt-4 mb-10">
                 <h2 class="text-base font-bold text-gray-800">Description</h2>
@@ -136,101 +237,316 @@
             </div>
             {% include 'components/get_event_feedback.html' %}
         </div>
-        <div class="absolute bottom-0 right-0 flex flex-col mb-6 mr-6 bg-white chat-container w-[350px] h-[70%] shadow-lg border rounded-md">
-            <div class=" flex flex-row flex-nowrap gap-4 items-center p-2 border-b bg-[#eaf89e]">
-                <div class="font-bold text-[#4d6113] text-base">Assistant</div>
+        <div id="chat"
+             class="absolute bottom-0 right-0 mb-6 mr-6 bg-white rounded-full shadow-lg border">
+            <div id="chatContainer" class="hidden flex-col w-full h-full">
+                <div class=" flex flex-row flex-nowrap gap-4 items-center justify-between p-2 border-b bg-[#eaf89e]">
+                    <div class="font-bold text-[#4d6113] text-base">Assistant</div>
+                    <div id="closeChatBtn"
+                         class="cursor-pointer active:scale-75 duration-100 will-change ml-auto text-color-muted">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-x">
+                            <path d="M18 6 6 18"/>
+                            <path d="m6 6 12 12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1"></div>
+                <div id="chatMessages" class="chat-messages flex flex-col gap-2 overflow-y-auto p-4">
+                </div>
+                <div class="chat-input flex flex-row flex-nowrap gap-4 items-center p-2 border-t bg-[#eaf89e]">
+                    <label for="userInput" class="w-full">
+                        <input type="text" id="userInput"
+                               autocomplete="none"
+                               class="form-control border-gray-300 bg-[#f5fccb] focus:border-[#a1c617] focus:ring-0 border px-3 py-2 w-full rounded-md text-sm"
+                               placeholder="Posez votre question...">
+                    </label>
+                    <button onclick="sendMessage()"
+                            class="p-3 rounded-full bg-[#80a20e] hover:bg-[#617b10] duration-200 focus:outline-none focus:ring-0 focus:ring-offset-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-send-horizontal">
+                            <path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/>
+                            <path d="M6 12h16"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="flex-1"></div>
-            <div id="chatMessages" class="chat-messages flex flex-col gap-2 overflow-y-auto p-4">
-            </div>
-            <div class="chat-input flex flex-row flex-nowrap gap-4 items-center p-2 border-t bg-[#eaf89e]">
-                <label for="userInput" class="w-full">
-                    <input type="text" id="userInput"
-                           autocomplete="none"
-                           class="form-control border-gray-300 bg-[#f5fccb] focus:border-[#a1c617] focus:ring-0 border px-3 py-2 w-full rounded-md text-sm"
-                           placeholder="Posez votre question...">
-                </label>
-                <button onclick="sendMessage()" onsubmit="sendMessage()"
-                        class="p-3 rounded-full bg-[#80a20e] hover:bg-[#617b10] duration-200 focus:outline-none focus:ring-0 focus:ring-offset-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="lucide lucide-send-horizontal">
-                        <path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/>
-                        <path d="M6 12h16"/>
-                    </svg>
-                </button>
+            <div id="openChatBtn"
+                 class="flex justify-center items-center p-3 border rounded-full bg-[#4d6113] hover:bg-[#617b10] cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                     stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-bot">
+                    <path d="M12 8V4H8"/>
+                    <rect width="16" height="12" x="4" y="8" rx="2"/>
+                    <path d="M2 14h2"/>
+                    <path d="M20 14h2"/>
+                    <path d="M15 13v2"/>
+                    <path d="M9 13v2"/>
+                </svg>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block script_tags %}
     <script>
-       function sendMessage() {
-          const userInput = document.getElementById('userInput');
-          const sendButton = document.querySelector('.chat-input button');
-          const chatMessages = document.getElementById('chatMessages');
-          const message = userInput.value.trim();
+        const BUTTON_STATES = {
+            default: {
+                svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-horizontal"><path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/><path d="M6 12h16"/></svg>',
+                classes: ['bg-[#80a20e]', 'hover:bg-[#617b10]']
+            },
+            loading: {
+                svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1c617" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>',
+                classes: ['bg-[#eaf89e]', 'border', 'border-[#a1c617]']
+            }
+        };
 
-          if (message === "") {
-             return;
-          }
+        function updateButtonState(button, state) {
+            button.innerHTML = BUTTON_STATES[state].svg;
+            button.className = 'p-3 rounded-full duration-200 focus:outline-none focus:ring-0 focus:ring-offset-0 ' + BUTTON_STATES[state].classes.join(' ');
+        }
 
-          chatMessages.innerHTML += `<div class="user-message flex flex-row w-full justify-end">
-           <div class="w-fit max-w-[300px] p-2 rounded-md bg-amber-200 text-sm">${message}</div>
-           </div>`;
-          userInput.value = '';
+        function addMessage(container, message, isUser = true) {
+            const alignment = isUser ? 'justify-end' : 'justify-start';
+            const bgColor = isUser ? 'bg-amber-200' : 'bg-blue-200';
 
-          sendButton.disabled = true;
-          sendButton.classList.remove('bg-[#80a20e]');
-          sendButton.classList.remove('hover:bg-[#617b10]');
-          sendButton.classList.add('bg-[#eaf89e]');
-          sendButton.classList.add('border');
-          sendButton.classList.add('border-[#a1c617]');
-          sendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1c617" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+            container.innerHTML += `
+            <div class="flex flex-row w-full ${alignment}">
+                <div class="w-fit max-w-[300px] p-2 rounded-md ${bgColor} text-sm">${message}</div>
+            </div>`;
+        }
 
-          fetch('{% url 'base:chat' %}', {
-             method: 'POST',
-             headers: {
-                'Content-Type': 'application/json',
-             },
-             body: JSON.stringify({
-                query: message,
-                chat_history: []
-             })
-          })
-             .then(response => response.json())
-             .then(data => {
-                chatMessages.innerHTML += `<div class="flex flex-row w-full justify-start">
-                <div class="w-fit max-w-[300px] p-2 rounded-md bg-blue-200 text-sm">${data.response}</div>
-                </div>`;
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.querySelector('.chat-input button');
+            const chatMessages = document.getElementById('chatMessages');
+            const message = userInput.value.trim();
 
-                sendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-horizontal"><path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/><path d="M6 12h16"/></svg>`;
+            if (!message) return;
+
+            addMessage(chatMessages, message);
+            userInput.value = '';
+
+            sendButton.disabled = true;
+            updateButtonState(sendButton, 'loading');
+
+            try {
+                const response = await fetch('{% url 'base:chat' %}', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({query: message, chat_history: []})
+                });
+
+                const data = await response.json();
+                addMessage(chatMessages, data.response, false);
+            } catch {
+                alert("Erreur lors de l'envoi du message.");
+            } finally {
                 sendButton.disabled = false;
-                sendButton.classList.remove('bg-[#eaf89e]');
-                sendButton.classList.remove('border');
-                sendButton.classList.remove('border-[#a1c617]');
-                sendButton.classList.add('bg-[#80a20e]');
-                sendButton.classList.add('hover:bg-[#617b10]');
+                updateButtonState(sendButton, 'default');
                 userInput.focus();
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-             })
-             .catch(() => {
-                alert("Erreur lors de l'envoi du message.");
-                sendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-horizontal"><path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/><path d="M6 12h16"/></svg>`;
-                sendButton.disabled = false;
-                sendButton.classList.remove('bg-[#eaf89e]');
-                sendButton.classList.remove('border');
-                sendButton.classList.remove('border-[#a1c617]');
-                sendButton.classList.add('bg-[#80a20e]');
-                sendButton.classList.add('hover:bg-[#617b10]');
-                userInput.focus();
-             });
-       }
+            }
+        }
 
-       document.getElementById('userInput').addEventListener('keypress', function (e) {
-          if (e.key === 'Enter') {
-             sendMessage();
-          }
-       });
+        document.addEventListener("DOMContentLoaded", () => {
+            const elements = {
+                openBtn: document.getElementById("openChatBtn"),
+                closeBtn: document.getElementById("closeChatBtn"),
+                chat: document.getElementById("chat"),
+                container: document.getElementById("chatContainer")
+            };
+
+            document.getElementById('userInput').addEventListener('keypress', e => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            elements.openBtn.addEventListener("click", () => {
+                elements.openBtn.classList.replace("flex", "hidden");
+                elements.chat.classList.remove("rounded-full");
+                elements.chat.classList.add("w-[350px]", "h-[70%]", "rounded-md");
+                elements.container.classList.replace("hidden", "flex");
+            });
+
+            elements.closeBtn.addEventListener("click", () => {
+                elements.openBtn.classList.replace("hidden", "flex");
+                elements.chat.classList.remove("w-[350px]", "h-[70%]", "rounded-md");
+                elements.chat.classList.add("rounded-full");
+                elements.container.classList.replace("flex", "hidden");
+            });
+        });
     </script>
+    {% if event.date < now %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const modal = document.getElementById('carousel-modal');
+                const carouselTrack = document.querySelector('.carousel-track');
+                const slides = document.querySelectorAll('.carousel-slide');
+                const thumbnails = document.querySelectorAll('.thumbnail');
+                const prevButton = document.getElementById('prevBtn');
+                const nextButton = document.getElementById('nextBtn');
+                const currentSlideElement = document.querySelector('.current-slide');
+                const totalSlidesElement = document.querySelector('.total-slides');
+
+                let currentIndex = 0;
+                const totalSlides = slides.length;
+
+                // Initialize total slides count
+                totalSlidesElement.textContent = `${totalSlides}`;
+
+                // Update current slide number and position
+                function updateSlide(index) {
+                    currentIndex = index;
+                    const offset = -currentIndex * 100;
+                    carouselTrack.style.transform = `translateX(${offset}%)`;
+
+                    // Update current slide number
+                    currentSlideElement.textContent = currentIndex + 1;
+
+                    // Update thumbnail highlight
+                    thumbnails.forEach((thumb, i) => {
+                        if (i === currentIndex) {
+                            thumb.classList.add('border-2', 'border-[#eaf89e]');
+                        } else {
+                            thumb.classList.remove('border-2', 'border-[#eaf89e]');
+                        }
+                    });
+                }
+
+                // Event Listeners for navigation
+                prevButton.addEventListener('click', () => {
+                    const newIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                    updateSlide(newIndex);
+                });
+
+                nextButton.addEventListener('click', () => {
+                    const newIndex = (currentIndex + 1) % totalSlides;
+                    updateSlide(newIndex);
+                });
+
+                // Thumbnail click handlers
+                thumbnails.forEach((thumb, index) => {
+                    thumb.addEventListener('click', () => {
+                        updateSlide(index);
+                    });
+                });
+
+                // Gallery image click handler
+                const galleryImages = document.querySelectorAll('.gallery-image');
+                galleryImages.forEach((image, index) => {
+                    image.addEventListener('click', () => {
+                        modal.classList.remove('hidden');
+                        modal.classList.add('flex');
+                        updateSlide(index);
+                    });
+                });
+
+                // Close modal handler
+                const closeButton = modal.querySelector('.lucide-x').parentElement;
+                closeButton.addEventListener('click', () => {
+                    modal.classList.remove('flex');
+                    modal.classList.add('hidden');
+                });
+
+                updateSlide(0);
+            });
+        </script>
+    {% endif %}
 {% endblock %}
+
+
+{#To chat on websocket comment the script above and uncomment the script bellow#}
+
+{#<script>#}
+{#   const userInput = document.getElementById('userInput');#}
+{#   const sendButton = document.querySelector('.chat-input button');#}
+{#   const chatMessages = document.getElementById('chatMessages');#}
+{#   const message = userInput.value.trim();#}
+{#   const chatSocket = new WebSocket(#}
+{#      'ws://' + window.location.host + '/ws/chat/'#}
+{#   );#}
+{##}
+{#   const openChatBtn = document.getElementById("openChatBtn");#}
+{#   const closeChatBtn = document.getElementById("closeChatBtn");#}
+{#   const chatContainer = document.getElementById("chatContainer");#}
+{#   const chat = document.getElementById("chat");#}
+{##}
+{#   openChatBtn.addEventListener("click", function () {#}
+{#      openChatBtn.classList.remove("flex");#}
+{#      openChatBtn.classList.add("hidden");#}
+{#      chat.classList.remove("rounded-full");#}
+{#      chat.classList.add("w-[350px]");#}
+{#      chat.classList.add("h-[70%]");#}
+{#      chat.classList.add("rounded-md");#}
+{#      chatContainer.classList.remove("hidden");#}
+{#      chatContainer.classList.add("flex");#}
+{#   });#}
+{##}
+{#   closeChatBtn.addEventListener("click", function () {#}
+{#      openChatBtn.classList.remove("hidden");#}
+{#      openChatBtn.classList.add("flex");#}
+{#      chat.classList.remove("w-[350px]");#}
+{#      chat.classList.remove("h-[70%]");#}
+{#      chat.classList.remove("rounded-md");#}
+{#      chat.classList.add("rounded-full");#}
+{#      chatContainer.classList.remove("flex");#}
+{#      chatContainer.classList.add("hidden");#}
+{#   });#}
+{##}
+{#   document.getElementById('userInput').addEventListener('keypress', function (e) {#}
+{#      if (e.key === 'Enter') {#}
+{#         sendMessage();#}
+{#      }#}
+{#   });#}
+{##}
+{#   chatSocket.onmessage = function (e) {#}
+{#      const data = JSON.parse(e.data);#}
+{##}
+{#      if (data.type === 'chat_message') {#}
+{#         chatMessages.innerHTML += `<div class="flex flex-row w-full justify-start">#}
+{#                <div class="w-fit max-w-[300px] p-2 rounded-md bg-blue-200 text-sm">${data.message}</div>#}
+{#                </div>`;#}
+{##}
+{#         sendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-horizontal"><path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/><path d="M6 12h16"/></svg>`;#}
+{#         sendButton.disabled = false;#}
+{#         sendButton.classList.remove('bg-[#eaf89e]');#}
+{#         sendButton.classList.remove('border');#}
+{#         sendButton.classList.remove('border-[#a1c617]');#}
+{#         sendButton.classList.add('bg-[#80a20e]');#}
+{#         sendButton.classList.add('hover:bg-[#617b10]');#}
+{#         chatMessages.scrollTop = chatMessages.scrollHeight;#}
+{#         userInput.focus();#}
+{#      }#}
+{#   };#}
+{##}
+{#   chatSocket.onclose = function (e) {#}
+{#      console.error('Chat socket closed unexpectedly');#}
+{#   };#}
+{##}
+{#   function sendMessage() {#}
+{##}
+{#      if (message === "") {#}
+{#         return;#}
+{#      }#}
+{##}
+{#      chatMessages.innerHTML += `<div class="user-message flex flex-row w-full justify-end">#}
+{#           <div class="w-fit max-w-[300px] p-2 rounded-md bg-amber-200 text-sm">${message}</div>#}
+{#           </div>`;#}
+{#      userInput.value = '';#}
+{##}
+{#      chatSocket.send(JSON.stringify({#}
+{#         'message': message,#}
+{#         'chat_history': []#}
+{#      }));#}
+{##}
+{#      sendButton.disabled = true;#}
+{#      sendButton.classList.remove('bg-[#80a20e]');#}
+{#      sendButton.classList.remove('hover:bg-[#617b10]');#}
+{#      sendButton.classList.add('bg-[#eaf89e]');#}
+{#      sendButton.classList.add('border');#}
+{#      sendButton.classList.add('border-[#a1c617]');#}
+{#      sendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1c617" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;#}
+{##}
+{#   }#}
+{#</script>#}

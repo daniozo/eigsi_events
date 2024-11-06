@@ -1,27 +1,27 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from dashboard.forms import NewEventForm, EventGalleryForm
+from dashboard.models import Event, EventGallery, Operation
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
-
-from dashboard.forms import NewEventForm, EventGalleryForm
-from dashboard.models import Event, EventGallery
-
+from dashboard.operation_types import OperationTypes
 
 now = timezone.now()
 
 event_type = [
-        ('conference', 'Conférence'),
-        ('workshop', 'Atelier'),
-        ('cultural', 'Culturel'),
-        ('ftour', 'Ftour'),
-        ('competition', 'Compétition'),
-        ('charity', 'Caritatif'),
-        ('talent_show', 'Eigsi Got Talent'),
-        ('integration_day', 'Journée d\'intégration'),
-        ('other', 'Autres'),
-    ]
+    ('conference', 'Conférence'),
+    ('workshop', 'Atelier'),
+    ('cultural', 'Culturel'),
+    ('ftour', 'Ftour'),
+    ('competition', 'Compétition'),
+    ('charity', 'Caritatif'),
+    ('talent_show', 'Eigsi Got Talent'),
+    ('integration_day', 'Journée d\'intégration'),
+    ('other', 'Autres'),
+]
 
 
 def auth(request):
@@ -41,10 +41,25 @@ def index(request):
     upcoming_events = Event.objects.filter(date__gte=now, archived_at=None, status=True).count()
     pending_events = Event.objects.filter(status=False, archived_at=None).count()
     all_events = Event.objects.count()
-    # TODO: get recent activities
+    recent_activities = Operation.objects.all().order_by('-date_time')
+
+    operation_type_titles = [
+        ('added_event', "Évènement ajouté"),
+        ('updated_event', "Évènement modifié"),
+        ('approved_event', "Évènement approuvé"),
+        ('archived_event', "Évènement archivé"),
+        ('unarchived_event', "Évènement désarchivé"),
+        ('deleted_event', "Évènement supprimé"),
+        ('updated_gallery', "Galerie modifié"),
+        ('add_user', "Utilisateur ajouté"),
+        ('activate_user', "Utilisateur activé"),
+        ('deactivate_user', "Utilisateur désactivé"),
+        ('delete_user', "Utilisateur supprimé"),
+    ]
 
     context = {'upcoming_events': upcoming_events, 'pending_events': pending_events,
-               'all_events': all_events}
+               'all_events': all_events, 'recent_activities': recent_activities,
+               'operation_type_titles': operation_type_titles, 'now': now}
 
     return render(request, 'dashboard/index.html', context)
 
@@ -54,7 +69,12 @@ def events(request):
     if request.method == 'POST':
         form = NewEventForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            event = form.save()
+            Operation.objects.create(
+                author=request.user,
+                type=OperationTypes.ADDED_EVENT.value,
+                content_object=event
+            )
             return redirect('dashboard:events')
     else:
         form = NewEventForm()
@@ -66,6 +86,7 @@ def events(request):
     event_type_filter = request.GET.get('event_type', '')
     accessibility = request.GET.get('accessibility', '')
     year_filter = request.GET.get('year', '')
+    page = request.GET.get('page', 1)
 
     event_s = Event.objects.all()
 
@@ -82,12 +103,20 @@ def events(request):
     if year_filter:
         event_s = event_s.filter(date__year=year_filter)
 
+    paginator = Paginator(event_s, 15)
+    try:
+        events_page = paginator.page(page)
+    except PageNotAnInteger:
+        events_page = paginator.page(1)
+    except EmptyPage:
+        events_page = paginator.page(paginator.num_pages)
+
     has_events = len(event_s) != 0
     years = list(range(year, start - 1, -1))
 
     context = {
         'has_events': has_events,
-        'events': event_s,
+        'events': events_page,
         'start': start,
         'years': years,
         'event_type': event_type,
@@ -110,6 +139,11 @@ def event_settings(request, event_id):
         form = NewEventForm(request.POST, request.FILES, instance=event)
         if form.is_valid():
             form.save()
+            Operation.objects.create(
+                author=request.user,
+                type=OperationTypes.UPDATED_EVENT.value,
+                content_object=event
+            )
             return redirect('dashboard:event_settings', event_id=event.id)
     else:
         form = NewEventForm(instance=event)
@@ -130,6 +164,11 @@ def approve_event(request, event_id):
         event = get_object_or_404(Event, id=event_id)
         event.status = True
         event.save()
+        Operation.objects.create(
+            author=request.user,
+            type=OperationTypes.APPROVED_EVENT.value,
+            content_object=event
+        )
         messages.success(request, "L'événement a été approuvé avec succès.")
         return redirect('dashboard:event_settings', event_id=event_id)
 
@@ -140,6 +179,11 @@ def archive_event(request, event_id):
         event = get_object_or_404(Event, id=event_id)
         event.archived_at = now
         event.save()
+        Operation.objects.create(
+            author=request.user,
+            type=OperationTypes.ARCHIVED_EVENT.value,
+            content_object=event
+        )
         messages.success(request, "L'événement a été bien archivé.")
         return redirect('dashboard:event_settings', event_id=event_id)
 
@@ -150,8 +194,40 @@ def unarchive_event(request, event_id):
         event = get_object_or_404(Event, id=event_id)
         event.archived_at = None
         event.save()
+        Operation.objects.create(
+            author=request.user,
+            type=OperationTypes.UNARCHIVED_EVENT.value,
+            content_object=event
+        )
         messages.success(request, "L'événement a été bien désarchivé.")
         return redirect('dashboard:event_settings', event_id=event_id)
+
+
+@login_required
+def delete_event(request, event_id):
+    if request.method == 'POST':
+        event = get_object_or_404(Event, id=event_id)
+        event_title = event.title
+
+        if not request.user.groups.filter(name="SuperAdmin").exists():
+            messages.error(request, "Vous n'avez pas les droits pour supprimer un événement.")
+            return redirect('dashboard:event_settings', event_id=event_id)
+
+        try:
+            event.delete()
+            Operation.objects.create(
+                author=request.user,
+                type=OperationTypes.DELETED_EVENT.value,
+                content_title=event_title
+            )
+            messages.success(request, "L'événement a été supprimé avec succès.")
+            return redirect('dashboard:events')
+
+        except Exception as e:
+            messages.error(request, "Une erreur est survenue lors de la suppression de l'événement.")
+            return redirect('dashboard:event_settings', event_id=event_id)
+
+    return JsonResponse({'status': 'error', 'message': 'Méthode non autorisée'}, status=405)
 
 
 @login_required
@@ -212,8 +288,3 @@ def users(request):
         'users': User.objects.filter(groups__name__in=['Student']).order_by('username'),
     }
     return render(request, 'dashboard/users.html', context)
-
-
-@login_required
-def dashboard(request):
-    return render(request, 'dashboard/dashboard.html')

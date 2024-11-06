@@ -12,58 +12,8 @@
         #loginModal {
             display: none;
         }
-
-        .featuring-events {
-            background-image: url("{% static 'images/eigsi_bg.png' %}");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .carousel-track {
-            transition: transform 0.5s ease;
-        }
-
-        .carousel-slide {
-            flex: 0 0 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .carousel-slide img {
-            width: 100%;
-            height: auto;
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            border: none;
-            margin: 0;
-            padding: 0 50px;
-            height: 100%;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        #pauseBtn {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 10;
-        }
     </style>
+    {% block styles_tags %}{% endblock %}
 </head>
 <body class="leading-normal tracking-normal bg-white">
 <header class="flex flex-row flex-nowrap w-full px-6 bg-white h-14 border-b border-color-subtle items-center">
@@ -95,7 +45,7 @@
                     </li>
                     {% if not user.is_authenticated %}
                         <li>
-                            <button id="openModalBtn"
+                            <button id="openAuthModalBtn"
                                     class="text-sm px-4 py-2 rounded-full bg-[#222e05] text-[#fbfee7] font-medium active:scale-95 duration-100 will-change">
                                 Connexion
                             </button>
@@ -139,7 +89,7 @@
         </svg>
         <span class="text-sm">Paramètres</span>
     </div>
-    <form action="{% url 'logout' %}" method="post">
+    <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button id="disconnectBtn"
                 class="flex flex-row flex-nowrap items-center gap-3 px-4 py-3 w-full rounded-bl-md rounded-br-md hover:bg-[#d8f165]">
@@ -224,7 +174,7 @@
    document.addEventListener("DOMContentLoaded", () => {
       const loginModal = document.getElementById("loginModal");
 
-      ["openModalBtn", "closeModalBtn"].forEach(id => {
+      ["openAuthModalBtn", "closeModalBtn"].forEach(id => {
          document.getElementById(id).addEventListener("click", () => {
             loginModal.style.display = loginModal.style.display === "flex" ? "none" : "flex";
          });

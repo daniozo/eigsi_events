@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 
 class Event(models.Model):
@@ -17,16 +19,15 @@ class Event(models.Model):
 
     title = models.CharField(max_length=200, verbose_name="Titre")
     description = models.TextField(verbose_name="Description")
+    poster = models.ImageField(upload_to='posters/', null=True, blank=True, verbose_name="Affiche de l'évènement")
     event_type = models.CharField(max_length=20, choices=EVENT_TYPE_CHOICES, verbose_name="Type d'évènement")
     location = models.CharField(max_length=200, verbose_name="Lieu")
     date = models.DateTimeField(verbose_name="Date de l'évènement")
-    organizer = models.CharField(max_length=100, verbose_name="Organisateur")
     is_public = models.BooleanField(default=True, verbose_name="Public ?")
     status = models.BooleanField(default=False, verbose_name="Statut")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Créé le")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Mis à jour le")
     archived_at = models.DateTimeField(null=True, verbose_name="Archivé le")
-    poster = models.ImageField(upload_to='posters/', null=True, blank=True, verbose_name="Affiche de l'évènement")
 
     def __str__(self):
         return self.title
@@ -65,3 +66,21 @@ class EventGallery(models.Model):
 
     def __str__(self):
         return f"Image pour {self.event.title}"
+
+
+class Operation(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Auteur")
+    type = models.CharField(max_length=25, verbose_name="Type d'opération")
+    date_time = models.DateTimeField(auto_now_add=True, verbose_name="Réalisé le")
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
+    content_title = models.CharField(max_length=200, null=True, blank=True, verbose_name="Titre de l'élément") #used when content was deleted
+
+    def __str__(self):
+        return self.type
+
+    class Meta:
+        verbose_name = "Opération"
+        verbose_name_plural = "Opérations"
+        ordering = ['-date_time']

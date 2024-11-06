@@ -1,16 +1,16 @@
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM, OllamaEmbeddings
 from langchain_core.prompts import PromptTemplate
 
 
 class RAGHandler:
     def __init__(self):
-        self.llm = Ollama(
-            model="llama3.2:3b",
+        self.llm = OllamaLLM(
+            # model="llama3.2:3b",
+            model="gemma2:2b",
             temperature=0.7,
             top_k=10,
             top_p=0.9,
@@ -18,7 +18,8 @@ class RAGHandler:
         )
 
         self.embeddings = OllamaEmbeddings(
-            model="llama3.2:3b"
+            # model="llama3.2:3b"
+            model="paraphrase-multilingual"
         )
         self.vector_store = None
 
@@ -28,7 +29,9 @@ class RAGHandler:
             output_key="answer"
         )
 
-        self.qa_template = """Tu es un assistant virtuel pour l'École d'Ingénieurs EIGSI, spécialisé dans les événements organisés par l'école. Ton rôle est d'aider les utilisateurs à trouver des informations précises et contextualisées sur ces événements.
+        self.qa_template = """Tu es un assistant virtuel pour l'EIGSI (École d'Ingénieurs en Généraliste en Système industriel), spécialisé dans les 
+        événements organisés par l'école. Ton rôle est d'aider les utilisateurs à trouver des informations précises 
+        et contextualisées sur ces événements.
 
                 Contexte sur les événements :
                 {context}

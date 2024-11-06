@@ -40,7 +40,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="{% url 'dashboard:index' %}">
+                        <a href="{% url 'dashboard:users' %}">
                             <div class="flex flex-col gap-2 rounded-lg p-4 bg-amber-100 hover:bg-amber-200 transition-colors">
                                 <div class="text-sm line-clamp-1">Gérer les utilisateurs</div>
                                 <div class="w-full flex flex-row justify-start">
@@ -108,7 +108,7 @@
         <div id="recentActivities"
              class="recentActivitiesHidden bg-white absolute bottom-0 left-0 right-0 mt-[20px] rounded-tl-md rounded-tr-md md:rounded-none border-x md:border-r-0 md:m-0 md:relative md:flex flex-col w-full md:w-[280px] border-l h-full transition-transform">
             <div class="flex flex-row flex-nowrap justify-between items-center mb-2 pl-4 pr-4 pt-4 md:pr-6 md:pt-6">
-                <div class="text-base font-medium">Activités récentes</div>
+                <div class="text-base font-medium">Dernières activités</div>
                 <div id="closeRecentActivitiesModalBtn"
                      class="md:hidden cursor-pointer active:scale-75 duration-100 will-change text-color-muted">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -119,31 +119,23 @@
                     </svg>
                 </div>
             </div>
-            <div class="hidden h-full overflow-hidden">
+            <div class=" h-full overflow-hidden">
                 <div class="h-full flex flex-col gap-2 px-4 pb-6 overflow-y-auto">
-                    {% for i in nbs %}
-                        <div class="flex flex-col gap-1 bg-[#f5fccb] w-full p-2">
-                            <div class="w-full flex flex-row flex-nowrap justify-between items-center text-[#415215]">
-                                <div class="text-sm font-bold">Évènement ajouté</div>
-                                <div class="text-xs">12/10/2024</div>
-                            </div>
-                            <div class="text-sm text-[#222e05] line-clamp-2">Conférence sur l'intélligence
-                                artificielle
-                            </div>
+                    {% for operation in recent_activities %}
+                        {% include 'components/recent_activity.html' with operation=operation operation_type_titles=operation_type_titles now=now %}
+                    {% empty %}
+                        <div class="flex-1 flex flex-col gap-5 justify-center items-center h-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="68" height="68" viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-clock-3">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16.5 12"/>
+                            </svg>
+                            <div class="text-base">Aucune activité</div>
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-            <div class="flex-1 flex flex-col gap-5 justify-center items-center h-full">
-                <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="68" height="68" viewBox="0 0 24 24" fill="none"
-                         stroke="#eaf89e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="lucide lucide-clock-3">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16.5 12"/>
-                    </svg>
-                </div>
-                <div class="text-base">Aucune activité</div>
             </div>
         </div>
     </div>
