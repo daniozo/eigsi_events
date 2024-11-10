@@ -1,8 +1,8 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from dashboard.forms import NewEventForm, EventGalleryForm
-from dashboard.models import Event, EventGallery, Operation
+from dashboard.models import Event, EventGallery, Operation, Participation
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.contrib import messages
@@ -23,10 +23,19 @@ event_type = [
     ('other', 'Autres'),
 ]
 
+def is_admin(user):
+    return user.groups.filter(name='Admin').exists()
+
+def is_super_admin(user):
+    return user.groups.filter(name='SuperAdmin').exists()
+
+def is_authorized(user):
+    print(f"{user.username} {is_admin(user)} and {is_super_admin(user)}")
+    return is_admin(user) or is_super_admin(user)
 
 def auth(request):
     if request.user.is_authenticated:
-        if request.user.groups.filter(name__in=['Admin', 'SuperAdmin']).exists():
+        if is_authorized(request.user):
             return redirect(request.GET.get('next', 'dashboard/index'))
         return redirect(request.GET.get('next', '/'))
 
@@ -36,7 +45,12 @@ def auth(request):
     return render(request, 'auth.html')
 
 
+def access_denied(request):
+    return render(request, 'access_denied.html')
+
+
 @login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
 def index(request):
     upcoming_events = Event.objects.filter(date__gte=now, archived_at=None, status=True).count()
     pending_events = Event.objects.filter(status=False, archived_at=None).count()
@@ -65,6 +79,7 @@ def index(request):
 
 
 @login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
 def events(request):
     if request.method == 'POST':
         form = NewEventForm(request.POST, request.FILES)
@@ -131,6 +146,7 @@ def events(request):
 
 
 @login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
 def event_settings(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     has_stats = event.date < now
@@ -159,6 +175,7 @@ def event_settings(request, event_id):
 
 
 @login_required
+@user_passes_test(is_super_admin, login_url='access_denied', redirect_field_name=None)
 def approve_event(request, event_id):
     if request.method == 'POST':
         event = get_object_or_404(Event, id=event_id)
@@ -174,6 +191,7 @@ def approve_event(request, event_id):
 
 
 @login_required
+@user_passes_test(is_super_admin, login_url='access_denied', redirect_field_name=None)
 def archive_event(request, event_id):
     if request.method == 'POST':
         event = get_object_or_404(Event, id=event_id)
@@ -189,6 +207,7 @@ def archive_event(request, event_id):
 
 
 @login_required
+@user_passes_test(is_super_admin, login_url='access_denied', redirect_field_name=None)
 def unarchive_event(request, event_id):
     if request.method == 'POST':
         event = get_object_or_404(Event, id=event_id)
@@ -204,6 +223,7 @@ def unarchive_event(request, event_id):
 
 
 @login_required
+@user_passes_test(is_super_admin, login_url='access_denied', redirect_field_name=None)
 def delete_event(request, event_id):
     if request.method == 'POST':
         event = get_object_or_404(Event, id=event_id)
@@ -231,6 +251,7 @@ def delete_event(request, event_id):
 
 
 @login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
 def add_gallery_images(request, event_id):
     event = get_object_or_404(Event, id=event_id)
 
@@ -260,19 +281,64 @@ def add_gallery_images(request, event_id):
                 'errors': form.errors
             }, status=400)
 
-    return JsonResponse({'status': 'error', 'message': 'Méthode non autorisée'}, status=405)
+    return JsonResponse({'status': 'error', 'message': 'Requête invalide'}, status=405)
 
 
 @login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
 def delete_gallery_image(request, image_id):
     image = get_object_or_404(EventGallery, id=image_id)
     if request.method == 'POST':
         image.delete()
         return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Requête invalide'}, status=400)
 
 
 @login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
+def approve_event_registration(request, participation_id):
+    if request.method == 'POST':
+        participation = get_object_or_404(Participation, id=participation_id)
+        participation.is_pending = False
+        participation.is_registered = True
+        participation.save()
+        Operation.objects.create(
+            author=request.user,
+            type=OperationTypes.APPROVED_REGISTRATION.value,
+            content_object=participation
+        )
+        return JsonResponse({'status': 'success', 'message': 'Inscription approuvée'})
+    return JsonResponse({'status': 'error', 'message': 'Requête invalide'}, status=400)
+
+
+@login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
+def reject_event_registration(request, participation_id):
+    if request.method == 'POST':
+        participation = get_object_or_404(Participation, id=participation_id)
+        participation.is_pending = False
+        participation.is_registered = False
+        participation.save()
+        Operation.objects.create(
+            author=request.user,
+            type=OperationTypes.REJECTED_REGISTRATION.value,
+            content_object=participation
+        )
+        return JsonResponse({'status': 'success', 'message': 'Inscription rejetés'})
+    return JsonResponse({'status': 'error', 'message': 'Requête invalide'}, status=400)
+
+
+@login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
+def users(request):
+    context = {
+        'users': User.objects.filter(groups__name__in=['Student']).order_by('username'),
+    }
+    return render(request, 'dashboard/users.html', context)
+
+
+@login_required
+@user_passes_test(is_authorized, login_url='access_denied', redirect_field_name=None)
 def stats(request):
     events_stats = {
         "inscriptions": Event.objects.filter(status="inscription").count(),
@@ -280,11 +346,3 @@ def stats(request):
     }
 
     return JsonResponse(events_stats)
-
-
-@login_required
-def users(request):
-    context = {
-        'users': User.objects.filter(groups__name__in=['Student']).order_by('username'),
-    }
-    return render(request, 'dashboard/users.html', context)

@@ -1,5 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser, Group, Permission
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -24,6 +25,7 @@ class Event(models.Model):
     location = models.CharField(max_length=200, verbose_name="Lieu")
     date = models.DateTimeField(verbose_name="Date de l'évènement")
     is_public = models.BooleanField(default=True, verbose_name="Public ?")
+    price = models.TextField(null=True, verbose_name="Prix")
     status = models.BooleanField(default=False, verbose_name="Statut")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Créé le")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Mis à jour le")
@@ -84,3 +86,87 @@ class Operation(models.Model):
         verbose_name = "Opération"
         verbose_name_plural = "Opérations"
         ordering = ['-date_time']
+
+
+class Guest(AbstractUser):
+    status = models.TextField(max_length=100, verbose_name="Status")
+    origin = models.TextField(max_length=200, verbose_name="Origin")
+    groups = models.ManyToManyField(Group, related_name="guest_group", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="guest_user_permissions", blank=True)
+
+
+class Participation(models.Model):
+    RATING_CHOICES = [
+        (1, '1 étoile'),
+        (2, '2 étoiles'),
+        (3, '3 étoiles'),
+        (4, '4 étoiles'),
+        (5, '5 étoiles'),
+    ]
+
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='participations',
+        verbose_name="Événement"
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='participations',
+        verbose_name="Utilisateur"
+    )
+
+    guest = models.ForeignKey(
+        Guest,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='participations',
+        verbose_name="Invité"
+    )
+
+    rating = models.IntegerField(
+        choices=RATING_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Note"
+    )
+
+    is_registered = models.BooleanField(
+        default=False,
+        verbose_name="Est inscrit à l'évènement"
+    )
+
+    is_pending = models.BooleanField(
+        default=True,
+        verbose_name="En attente de validation"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Créé le"
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Mise à jour le"
+    )
+
+    class Meta:
+        verbose_name = "Participation"
+        verbose_name_plural = "Participations"
+        unique_together = [['event', 'user'], ['event', 'guest']]
+
+    def clean(self):
+        if self.user and self.guest:
+            raise ValidationError("Une participation ne peut pas avoir à la fois un utilisateur et un invité")
+        if not self.user and not self.guest:
+            raise ValidationError("Une participation doit avoir soit un utilisateur soit un invité")
+
+    def __str__(self):
+        participant = self.user if self.user else self.guest
+        return f"Participation de {participant} à {self.event}"

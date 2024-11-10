@@ -9,8 +9,8 @@ from langchain_core.prompts import PromptTemplate
 class RAGHandler:
     def __init__(self):
         self.llm = OllamaLLM(
-            # model="llama3.2:3b",
-            model="gemma2:2b",
+            model="llama3.2:3b",
+            # model="gemma2:2b",
             temperature=0.7,
             top_k=10,
             top_p=0.9,

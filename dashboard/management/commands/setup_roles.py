@@ -8,6 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Define groupes
+        guest_group, created = Group.objects.get_or_create(name='Guest')
         student_group, created = Group.objects.get_or_create(name='Student')
         admin_group, created = Group.objects.get_or_create(name='Admin')
         super_admin_group, created = Group.objects.get_or_create(name='SuperAdmin')
@@ -20,6 +21,7 @@ class Command(BaseCommand):
         delete_event_permission = Permission.objects.get(codename='delete_event', content_type=content_type)
 
         # Assign permissions to groups
+        guest_group.permissions.add(view_event_permission)
         student_group.permissions.add(view_event_permission)
         admin_group.permissions.add(view_event_permission, add_event_permission, change_event_permission)
         super_admin_group.permissions.add(view_event_permission, add_event_permission, change_event_permission, delete_event_permission)

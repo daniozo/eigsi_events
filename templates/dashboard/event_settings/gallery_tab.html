@@ -8,13 +8,14 @@
             {{ event.gallery.all|length }} images dans la galerie
         {% endif %}
     </div>
-    {% if not event.archived_at %}<div class="mb-8">
-        <div>
-            <form id="gallery-form" method="post" enctype="multipart/form-data"
-                  data-upload-url="{% url 'dashboard:add_gallery_images' event.id %}">
-                {% csrf_token %}
-                <div class="space-y-2">
-                    <label for="gallery-images" class="block text-sm font-medium text-gray-700">
+    {% if not event.archived_at %}
+        <div class="mb-8">
+            <div>
+                <form id="gallery-form" method="post" enctype="multipart/form-data"
+                      data-upload-url="{% url 'dashboard:add_gallery_images' event.id %}">
+                    {% csrf_token %}
+                    <div class="space-y-2">
+                        <label for="gallery-images" class="block text-sm font-medium text-gray-700">
                                     <span class="mt-1 flex justify-center px-8 py-8 border-2 border-gray-300 border-dashed rounded-md">
                                         <div class="space-y-1 text-center flex flex-col items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
@@ -38,11 +39,12 @@
                                             </div>
                                         </div>
                                     </span>
-                    </label>
-                </div>
-            </form>
+                        </label>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>{% endif %}
+    {% endif %}
     <div id="gallery-container" class="relative grid grid-cols-2 md:grid-cols-4 gap-4">
         {% for image in event.gallery.all %}
             <div id="image-{{ image.id }}" class="gallery-image relative group rounded-lg overflow-hidden shadow">

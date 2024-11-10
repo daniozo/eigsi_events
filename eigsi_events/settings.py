@@ -29,9 +29,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-# print("GOOGLE_CLIENT_ID:", os.getenv('GOOGLE_CLIENT_ID'))
-# print("GOOGLE_SECRET:", os.getenv('GOOGLE_SECRET'))
-
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -42,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "daphne",
+    "daphne", #must be added before django.contrib.staticfiles
     "django.contrib.staticfiles",
     'django.contrib.sites',
     'allauth',
