@@ -8,18 +8,24 @@
             </svg>
         </button>
     </div>
-    <p class="mb-4 text-center text-sm">Avez-vous participé à cet evenement ? Nous adorerons avoir votre avis.</p>
+    <p class="mb-4 text-center text-sm">Avez-vous participé à cet évènement ? Nous adorerons avoir votre avis.</p>
     <div class="mb-4 flex justify-center gap-2.5">
-        <button class="text-md rounded-lg border border-gray-200 px-2.5 py-1.5 hover:bg-gray-50">😞</button>
-        <button class="text-md rounded-lg border border-gray-200 px-2.5 py-1.5 hover:bg-gray-50">😐</button>
-        <button class="text-md rounded-lg border border-gray-200 px-2.5 py-1.5 hover:bg-gray-50">🙂</button>
-        <button class="text-md rounded-lg border border-gray-200 px-2.5 py-1.5 hover:bg-gray-50">😊</button>
-        <button class="text-md rounded-lg border border-gray-200 px-2.5 py-1.5 hover:bg-gray-50">😍</button>
+        <button id="rate1Btn" class="text-md rounded-lg px-2.5 py-1.5">😞
+        </button>
+        <button id="rate2Btn" class="text-md rounded-lg px-2.5 py-1.5">😐
+        </button>
+        <button id="rate3Btn" class="text-md rounded-lg px-2.5 py-1.5">🙂
+        </button>
+        <button id="rate4Btn" class="text-md rounded-lg px-2.5 py-1.5">😊
+        </button>
+        <button id="rate5Btn" class="text-md rounded-lg px-2.5 py-1.5">😍
+        </button>
     </div>
-{#    <textarea#}
-{#            class="mb-3 w-full rounded-lg border border-gray-200 p-3 text-sm focus:outline-none resize-none"#}
-{#            rows="4" placeholder="Votre commentaire (facultatif)"></textarea>#}
-    <button class="w-full rounded-lg bg-[#222e05] py-2.5 text-sm font-medium text-white transition active:scale-95 duration-100 will-change">
+    {#    <textarea#}
+    {#            class="mb-3 w-full rounded-lg border border-gray-200 p-3 text-sm focus:outline-none resize-none"#}
+    {#            rows="4" placeholder="Votre commentaire (facultatif)"></textarea>#}
+    <button id="sendRateBtn"
+            class="w-full rounded-lg bg-[#222e05] py-2.5 text-sm font-medium text-white transition active:scale-95 duration-100 will-change disabled:active:scale-100 disabled:bg-gray-300" disabled>
         Envoyer
     </button>
 </div>

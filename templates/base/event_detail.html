@@ -341,7 +341,51 @@
                 <h2 class="text-base font-bold text-gray-800">Description</h2>
                 <p class="mt-2 text-left">{{ event.description }}</p>
             </div>
-            {% include 'components/get_event_feedback.html' %}
+            {% if not is_excessed_date and user.is_authenticated %}
+                {% include 'components/get_event_feedback.html' %}
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const rateButtons = document.querySelectorAll("[id^='rate']");
+                        const sendRateBtn = document.getElementById("sendRateBtn");
+
+                        let selectedRating = null;
+
+                        rateButtons.forEach((button, index) => {
+                            button.addEventListener("click", () => {
+                                rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
+                                button.classList.add("bg-[#c3e536]");
+                                selectedRating = index + 1;
+                                sendRateBtn.disabled = false;
+                            });
+                        });
+
+                        sendRateBtn.addEventListener("click", () => {
+                            if (!selectedRating) {
+                                alert("Veuillez sélectionner une note avant d'envoyer.");
+                                return;
+                            }
+
+                            fetch(`{% url 'base:rate_event' event.id %}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': '{{ csrf_token }}'
+                                },
+                                body: JSON.stringify({rate: selectedRating})
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    alert(data.response);
+                                    rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
+                                    selectedRating = null;
+                                })
+                                .catch(error => {
+                                    console.error("Erreur lors de l'envoi de la note :", error);
+                                });
+                        });
+                    })
+                </script>
+            {% endif %}
         </div>
         {% if is_future_event %}
             <div id="chat"
@@ -564,6 +608,51 @@
 
                 updateSlide(0);
             });
+        </script>
+    {% endif %}
+
+    {% if not excessed_date and user.is_authenticated %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const rateButtons = document.querySelectorAll("[id^='rate']");
+                const sendRateBtn = document.getElementById("sendRateBtn");
+
+                let selectedRating = null;
+
+                rateButtons.forEach((button, index) => {
+                    button.addEventListener("click", () => {
+                        rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
+                        button.classList.add("bg-[#c3e536]");
+                        selectedRating = index + 1;
+                        sendRateBtn.disabled = false;
+                    });
+                });
+
+                sendRateBtn.addEventListener("click", () => {
+                    if (!selectedRating) {
+                        alert("Veuillez sélectionner une note avant d'envoyer.");
+                        return;
+                    }
+
+                    fetch(`{% url 'base:rate_event' event.id %}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({rate: selectedRating})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.response);
+                            rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
+                            selectedRating = null;
+                        })
+                        .catch(error => {
+                            console.error("Erreur lors de l'envoi de la note :", error);
+                        });
+                });
+            })
         </script>
     {% endif %}
 {% endblock %}

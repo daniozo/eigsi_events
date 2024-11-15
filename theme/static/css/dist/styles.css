@@ -1681,6 +1681,11 @@ select {
   background-color: rgb(161 198 23 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#c3e536\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(195 229 54 / var(--tw-bg-opacity));
+}
+
 .bg-\[\#d8f165\] {
   --tw-bg-opacity: 1;
   background-color: rgb(216 241 101 / var(--tw-bg-opacity));
@@ -2559,11 +2564,6 @@ body {
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
-.hover\:bg-gray-50:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-green-600:hover {

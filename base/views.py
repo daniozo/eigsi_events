@@ -1,10 +1,16 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from dashboard.forms import NewEventForm
 from dashboard.models import Event, Participation, Operation
 from dashboard.operation_types import OperationTypes
 from django.utils import timezone
+from datetime import timedelta
+
+
 
 now = timezone.now()
 
@@ -42,6 +48,7 @@ def search(request):
 
 def event_detail(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+    extended_date = event.date + timedelta(days=31)
 
     if request.user.is_authenticated:
         participation = Participation.objects.filter(event_id=event_id, user=request.user).first()
@@ -49,7 +56,8 @@ def event_detail(request, event_id):
             'event': event,
             'user_is_ghost': request.user.groups.filter(name='Ghost').exists(),
             'participation': participation,
-            'is_future_event': event.date > now
+            'is_future_event': event.date > now,
+            'is_excessed_date': extended_date < now
         }
         return render(request, 'base/event_detail.html', context)
 
@@ -127,3 +135,37 @@ def event_registration(request, event_id):
                 register_eigsi_member()
 
     return redirect('base:event_detail', event_id=event_id)
+
+@login_required
+def rate_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    extended_date = event.date + timedelta(days=31)
+
+    response = "Cet évènement est dépassé et ne peut plus être noté."
+
+    if extended_date < now:
+        return JsonResponse({"response": response})
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        rating = data.get("rate")
+        if rating not in [int(i) for i in range(1, 6)]:
+            response = "Veuillez fournir une note valide."
+            return JsonResponse({"response": response})
+
+        try:
+            participation = Participation.objects.get(event=event, user=request.user)
+            participation.rating = int(rating)
+            participation.save()
+            response = "Votre note a été mise à jour avec succès."
+        except Participation.DoesNotExist:
+            Participation.objects.create(
+                event=event,
+                user=request.user,
+                rating=int(rating),
+                is_pending=False,
+                is_registered=True,
+            )
+            response = "Vous avez été inscrit et votre note a été enregistrée avec succès."
+
+    return JsonResponse({"response": response})
