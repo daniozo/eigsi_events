@@ -1,206 +1,219 @@
-{% load socialaccount %}
-{% load static tailwind_tags %}
+{% load socialaccount %} {% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+  <head>
     <title>Eigsi Event</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     {% tailwind_css %}
     <style>
-        #loginModal {
-            display: none;
-        }
+      #loginModal {
+        display: none;
+      }
+      
+      .menu-slide {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(100%);
+      }
+      
+      .menu-slide.open {
+        transform: translateX(0);
+      }
+      
+      .backdrop {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      .backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
     </style>
-    {% block styles_tags %}{% endblock %}
-</head>
-<body class="leading-normal tracking-normal bg-white">
-<header class="flex flex-row flex-nowrap w-full px-6 bg-white h-14 border-b border-color-subtle items-center">
-    <div class="container flex h-14 max-w-screen-2xl items-center">
+    {% block styles_tags %}
+
+    {% endblock %}
+  </head>
+  <body class="leading-normal tracking-normal bg-white">
+    <header class="flex flex-row flex-nowrap w-full px-6 bg-white h-14 border-b border-color-subtle items-center">
+      <div class="container flex h-14 max-w-screen-2xl items-center">
         <div class="flex-1 flex justify-between items-center">
-            <a href="{% url 'base:index' %}" class="text-xl font-bold py-4 md:py-0 block">EigsiEvents</a>
+          <a href="{% url 'base:index' %}" class="text-xl font-bold py-4 md:py-0 block">EigsiEvents</a>
         </div>
-        <label for="menu-toggle" class="pointer-cursor md:hidden block">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="lucide lucide-menu">
-                <line x1="4" x2="20" y1="12" y2="12"/>
-                <line x1="4" x2="20" y1="6" y2="6"/>
-                <line x1="4" x2="20" y1="18" y2="18"/>
-            </svg>
-        </label>
-        <input class="hidden" type="checkbox" id="menu-toggle"/>
+        <button id="menuToggle" class="pointer-cursor md:hidden block">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+        </button>
         <div class="hidden md:flex md:items-center md:w-auto w-full" id="menu">
-            <nav>
-                <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
-                    <li>
-                        <a class="md:p-4 py-3 px-0 block" href="{% url 'base:index' %}">Accueil</a>
-                    </li>
-                    <li>
-                        <a class="md:p-4 py-3 px-0 block" href="{% url 'base:search' %}">Rechercher</a>
-                    </li>
-                    <li>
-                        <a class="md:p-4 py-3 px-0 block" href="#">Support</a>
-                    </li>
-                    {% if not user.is_authenticated %}
-                        <li>
-                            <button id="openAuthModalBtn"
-                                    class="text-sm px-4 py-2 rounded-full bg-[#222e05] text-[#fbfee7] font-medium active:scale-95 duration-100 will-change">
-                                Connexion
-                            </button>
-                        </li>
-                    {% else %}
-                        <li class="flex items-center h-full">
-                            <button id="openProfileModal" class="border border-[#a1c617] bg-[#f5fccb] rounded-full p-2">
-                            <span class="block">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                     fill="none" stroke="#617b10" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round" class="lucide lucide-user"><path
-                                        d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </span>
-                            </button>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
+          <nav>
+            <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+              <li>
+                <a class="md:p-4 py-3 px-0 block" href="{% url 'base:index' %}">Accueil</a>
+              </li>
+              <li>
+                <a class="md:p-4 py-3 px-0 block" href="{% url 'base:search' %}">Rechercher</a>
+              </li>
+              <li>
+                <a class="md:p-4 py-3 px-0 block" href="#">Support</a>
+              </li>
+              {% if not user.is_authenticated %}
+                <li>
+                  <a href="{% url 'auth' %}" class="text-sm px-4 py-2 rounded-full bg-[#222e05] text-[#fbfee7] font-medium active:scale-95 duration-100 will-change">Connexion</a>
+                </li>
+              {% else %}
+                <li class="flex items-center h-full">
+                  <button id="openProfileModal" class="border border-[#a1c617] bg-[#f5fccb] rounded-full p-2">
+                    <span class="block">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#617b10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    </span>
+                  </button>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
         </div>
-    </div>
-</header>
-{% if user.is_authenticated %}
-<div id="profileModal"
-     class="absolute top-14 right-5 z-10 hidden flex-col bg-white shadow-md rounded-md transition-all select-none">
-    <div class="flex flex-row flex-nowrap items-center gap-3 px-4 py-3 w-full rounded-tl-md rounded-tr-md hover:bg-[#d8f165]">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round" class="lucide lucide-user">
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-        </svg>
-        <span class="text-sm">Profile</span>
-    </div>
-    <div class="flex flex-row flex-nowrap items-center gap-3 px-4 py-3 w-full hover:bg-[#d8f165]">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round" class="lucide lucide-settings">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-            <circle cx="12" cy="12" r="3"/>
-        </svg>
-        <span class="text-sm">Paramètres</span>
-    </div>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button id="disconnectBtn"
-                class="flex flex-row flex-nowrap items-center gap-3 px-4 py-3 w-full rounded-bl-md rounded-br-md hover:bg-[#d8f165]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="lucide lucide-log-out">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                <polyline points="16 17 21 12 16 7"/>
-                <line x1="21" x2="9" y1="12" y2="12"/>
+      </div>
+    </header>
+
+    <!-- Backdrop -->
+    <div id="menuBackdrop" class="md:hidden backdrop fixed inset-0 bg-black/50 z-40"></div>
+
+    <!-- Menu mobile -->
+    <div id="mobileMenu" class="md:hidden menu-slide fixed top-0 right-0 h-full w-80 bg-white z-50 shadow-lg">
+      <div class="px-4 py-2 border-b">
+        <div class="flex justify-between items-center">
+          <span class="text-xl font-bold">Menu</span>
+          <button id="closeMenu" class="p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6L6 18M6 6l12 12" />
             </svg>
-            <span class="text-sm">Déconnexion</span></button>
-    </form>
+          </button>
+        </div>
+      </div>
 
-</div>
-{% endif %}
-{% if not user.is_authenticated %}
-<div id="loginModal"
-     class="fixed inset-0 bg-backdrop backdrop-filter backdrop-blur-sm z-50 flex items-center justify-center px-6">
-    <div class="h-auto overflow-hidden rounded-2xl bg-white shadow-2xl w-full max-w-md">
-        <div class="h-14 flex items-center px-6">
-            <div id="closeModalBtn"
-                 class="cursor-pointer active:scale-75 duration-100 will-change ml-auto text-color-muted">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </div>
-        </div>
-        <div class="p-6 sm:p-14 pt-0 sm:pt-0 flex flex-col gap-5">
-            <div class="text-center">
-                <div class="text-xl md:text-2xl tracking-tight font-bold text-color font-display">Connexion</div>
-            </div>
-            <div class="text-sm text-center text-gray-600">Utilisez votre compte @eigsica pour continuer</div>
-            <form action="{% provider_login_url 'google' %}" method="get">
-                <button class="px-6 py-3 rounded-full form-control border active:border-[#a1c617] hover:border-[#a1c617] w-full flex items-center active:scale-95 duration-100 will-change justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                              fill="#4285F4"></path>
-                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                              fill="#34A853"></path>
-                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                              fill="#FBBC05"></path>
-                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                              fill="#EA4335"></path>
-                        <path d="M1 1h22v22H1z" fill="none"></path>
-                    </svg>
-                    <span>Se connecter avec Google</span>
-                </button>
-            </form>
-            <div>
-                {#                <div class="flex space-x-4 items-center my-6">#}
-                {#                    <hr class="border border-color-subtle flex-grow">#}
-                {#                    <div class="text-color-muted uppercase text-xs">ou</div>#}
-                {#                    <hr class="border border-color-subtle flex-grow">#}
-                {#                </div>#}
-                {#                <form class="space-y-6">#}
-                {#                    <input class="form-control focus:border-[#222e05] border px-6 py-3 w-full rounded-full"#}
-                {#                           type="email" placeholder="Entrer votre adresse mail (eigsica)" autocomplete="email">#}
-                {#                     <input class="form-control focus:border-[#222e05] border px-6 py-3 w-full rounded-full"#}
-                {#                           type="email" placeholder="Entrer votre adresse mail (eigsica)" autocomplete="email">#}
-                {#                    <button type="submit"#}
-                {#                            class="px-6 py-3 rounded-full bg-[#222e05] active:scale-95 duration-100 will-change text-white w-full cursor-pointer">#}
-                {#                        <span>Continuer</span>#}
-                {#                    </button>#}
-                {#                </form>#}
-            </div>
-        </div>
+      <nav class="p-4">
+        <ul class="space-y-4 text-gray-700">
+          <li>
+            <a href="{% url 'base:index' %}" class="hover:underline">Accueil</a>
+          </li>
+          <li>
+            <a href="{% url 'base:search' %}" class="hover:underline">Rechercher</a>
+          </li>
+          <li>
+            <a href="#" class="hover:underline">Support</a>
+          </li>
+          <hr />
+          {% if not user.is_authenticated %}
+            <li>
+              <button class="hover:underline">Connexion</button>
+            </li>
+          {% else %}
+            <li class="">
+              <a href="#" class="hover:underline">Profile</a>
+            </li>
+            <li>
+              <a href="#" class="hover:underline">Paramètres</a>
+            </li>
+            <li>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="w-full text-left">Déconnexion</button>
+              </form>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
     </div>
-</div>
-{% endif %}
-<main class="flex flex-col md:flex-row m-0 w-full" style="height: calc(100dvh - 3.5rem);">
-    <div class="overflow-y-auto w-full">
+    {% if user.is_authenticated %}
+      <div id="profileModal" class="absolute top-14 right-5 z-10 hidden flex-col bg-white shadow-md rounded-md transition-all select-none">
+        <div class="flex flex-row flex-nowrap items-center gap-3 px-4 py-3 w-full rounded-tl-md rounded-tr-md hover:bg-[#d8f165]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span class="text-sm">Profile</span>
+        </div>
+        <div class="flex flex-row flex-nowrap items-center gap-3 px-4 py-3 w-full hover:bg-[#d8f165]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <span class="text-sm">Paramètres</span>
+        </div>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button id="disconnectBtn" class="flex flex-row flex-nowrap items-center gap-3 px-4 py-3 w-full rounded-bl-md rounded-br-md hover:bg-[#d8f165]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" x2="9" y1="12" y2="12" />
+            </svg>
+            <span class="text-sm">Déconnexion</span>
+          </button>
+        </form>
+      </div>
+    {% endif %}
+    <main class="flex flex-col md:flex-row m-0 w-full" style="height: calc(100dvh - 3.5rem)">
+      <div class="overflow-y-auto w-full">
         {% block content %}
+
         {% endblock %}
-    </div>
-</main>
-<footer>
-</footer>
-{% if not user.is_authenticated %}
-<script>
-   document.addEventListener("DOMContentLoaded", () => {
-      const loginModal = document.getElementById("loginModal");
+      </div>
+    </main>
+    <footer></footer>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const openProfileModal = document.getElementById('openProfileModal')
+        const profileModal = document.getElementById('profileModal')
+      
+        openProfileModal.addEventListener('click', function (e) {
+          e.stopPropagation()
+          profileModal.style.display = profileModal.style.display === 'none' || profileModal.style.display === '' ? 'block' : 'none'
+        })
+      
+        document.addEventListener('click', function () {
+          profileModal.style.display = 'none'
+        })
+      
+        profileModal.addEventListener('click', function (e) {
+          e.stopPropagation()
+        })
+      })
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.getElementById('menuToggle')
+        const closeMenuBtn = document.getElementById('closeMenu')
+        const mobileMenu = document.getElementById('mobileMenu')
+        const menuBackdrop = document.getElementById('menuBackdrop')
+      
+        function openMenu() {
+          mobileMenu.classList.add('open')
+          menuBackdrop.classList.add('open')
+          document.body.style.overflow = 'hidden'
+        }
+      
+        function closeMenu() {
+          mobileMenu.classList.remove('open')
+          menuBackdrop.classList.remove('open')
+          document.body.style.overflow = ''
+        }
+      
+        menuToggle.addEventListener('click', openMenu)
+        closeMenuBtn.addEventListener('click', closeMenu)
+        menuBackdrop.addEventListener('click', closeMenu)
+      })
+    </script>
+    {% block script_tags %}
 
-      ["openAuthModalBtn", "closeModalBtn"].forEach(id => {
-         document.getElementById(id).addEventListener("click", () => {
-            loginModal.style.display = loginModal.style.display === "flex" ? "none" : "flex";
-         });
-      });
-   });
-</script>
-{% endif %}
-<script>
-   document.addEventListener("DOMContentLoaded", function () {
-      const openProfileModal = document.getElementById("openProfileModal");
-      const profileModal = document.getElementById("profileModal");
-
-      openProfileModal.addEventListener('click', function (e) {
-         e.stopPropagation();
-         profileModal.style.display = (profileModal.style.display === 'none' || profileModal.style.display === '') ? 'block' : 'none';
-      });
-
-      document.addEventListener('click', function () {
-         profileModal.style.display = 'none';
-      });
-
-      profileModal.addEventListener('click', function (e) {
-         e.stopPropagation();
-      });
-   });
-</script>
-{% block script_tags %}{% endblock %}
-</body>
+    {% endblock %}
+  </body>
 </html>

@@ -1,89 +1,66 @@
-<div id="newEventModal"
-     class="select-none fixed hidden inset-0 bg-backdrop backdrop-filter backdrop-blur-sm z-50 items-center justify-center px-4">
-    <div class="h-auto overflow-hidden rounded-2xl bg-white shadow-2xl w-full max-w-md max-h-screen sm:max-h-[90vh]">
-        <div class="h-14 flex items-center px-6">
-            <div class="text-center w-full md:text-base tracking-tight font-bold text-color font-display">
-                Nouvel évènement
-            </div>
-            <div id="closeModalBtn"
-                 class="cursor-pointer active:scale-75 duration-100 will-change ml-auto text-color-muted">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="lucide lucide-x">
-                    <path d="M18 6 6 18"/>
-                    <path d="m6 6 12 12"/>
-                </svg>
-            </div>
-        </div>
-        <div class="p-6 sm:p-8 pt-0 sm:pt-0 overflow-y-auto max-h-[75vh]">
-            <div class="select-none">
-                <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
-                    {% csrf_token %}
-                    <label class="flex flex-col gap-1">
-                        <span class="text-xs font-bold">Titre</span>
-                        <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
-                               type="text" name="title" placeholder="Titre" required>
-                    </label>
-                    <label class="flex flex-col gap-1">
-                        <span class="text-xs font-bold">Lieu</span>
-                        <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
-                               type="text" name="location" placeholder="Lieu" required>
-                    </label>
-                    <label class="flex flex-col gap-1">
-                        <span class="text-xs font-bold">Description</span>
-                        <textarea id="description"
-                                  class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm resize-none"
-                                  name="description" placeholder="Description" rows="3"></textarea>
-                    </label>
-                    <label class="flex flex-col gap-1">
-                        <span class="text-xs font-bold">Date et heure</span>
-                        <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
-                               type="datetime-local" name="date" required>
-                    </label>
-                    <label class="flex flex-col gap-1">
-                        <span class="text-xs font-bold">Type d'évènement</span>
-                        <select class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm"
-                                name="event_type" required>
-                            <option value="conference">Conférence</option>
-                            <option value="workshop">Atelier</option>
-                            <option value="cultural">Culturel</option>
-                            <option value="ftour">Ftour</option>
-                            <option value="competition">Compétition</option>
-                            <option value="charity">Caritatif</option>
-                            <option value="talent_show">Eigsi Got Talent</option>
-                            <option value="integration_day">Journée d'intégration</option>
-                            <option value="other">Autres</option>
-                        </select>
-                    </label>
-                    <label class="flex flex-col gap-1">
-                        <span class="text-xs font-bold">Ajoutez une affiche</span>
-                        <input class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-3
-                  file:rounded-full file:border-0
-                  file:text-sm
-                  focus:ring-0
-                  focus:border-none
-                  focus:outline-none
-                  file:bg-[#222e05] file:text-white
-                  hover:file:bg-[#4d6113]"
-                               type="file" name="poster">
-                    </label>
-                    <label class="flex flex-row flex-nowrap items-center gap-3 text-sm text-[#415215] w-full">
-                        <span class="text-xs font-bold">Public</span><input
-                            class="form-control focus:border-[#a1c617] focus:ring-0 border p-1 rounded-md"
-                            type="checkbox" name="is_public">
-                    </label>
-                    <div class="flex flex-row flex-nowrap gap-2 w-full justify-end items-center">
-                        <div id="cancelModalBtn"
-                             class="px-3 py-2 rounded-full border border-[#222e05] text-[#4d6113] active:scale-95 duration-100 will-change cursor-pointer">
-                            <span>Annuler</span>
-                        </div>
-                        <button type="submit"
-                                class="px-3 py-2 rounded-full border border-[#222e05] bg-[#222e05] active:scale-95 duration-100 will-change text-white cursor-pointer">
-                            <span>Ajouter</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+<div id="newEventModal" class="select-none fixed hidden inset-0 bg-backdrop backdrop-filter backdrop-blur-sm z-50 items-center justify-center px-4">
+  <div class="h-auto overflow-hidden rounded-2xl bg-white shadow-2xl w-full max-w-md max-h-screen sm:max-h-[90vh]">
+    <div class="h-14 flex items-center px-6">
+      <div class="text-center w-full md:text-base tracking-tight font-bold text-color font-display">Nouvel évènement</div>
+      <div id="closeModalBtn" class="cursor-pointer active:scale-75 duration-100 will-change ml-auto text-color-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </div>
     </div>
+    <div class="p-6 sm:p-8 pt-0 sm:pt-0 overflow-y-auto max-h-[75vh]">
+      <div class="select-none">
+        <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
+          {% csrf_token %}
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-bold">Titre</span>
+            <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm" type="text" name="title" placeholder="Titre" required />
+          </label>
+          <label class="flex flex-row flex-nowrap items-center gap-3 w-full"><input class="form-control focus:border-[#a1c617] focus:ring-0 focus:outline-none border p-1 rounded-md" type="checkbox" name="is_public" /><span class="text-xs font-bold">Évènement public</span></label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-bold">Lieu</span>
+            <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm" type="text" name="location" placeholder="Lieu" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-bold">Description</span>
+            <textarea id="description" class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm resize-none" name="description" placeholder="Description" rows="3"></textarea>
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-bold">Date et heure</span>
+            <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm" type="datetime-local" name="date" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-bold">Type d'évènement</span>
+            <select class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm" name="event_type" required>
+              <option value="conference">Conférence</option>
+              <option value="workshop">Atelier</option>
+              <option value="cultural">Culturel</option>
+              <option value="ftour">Ftour</option>
+              <option value="competition">Compétition</option>
+              <option value="charity">Caritatif</option>
+              <option value="talent_show">Eigsi Got Talent</option>
+              <option value="integration_day">Journée d'intégration</option>
+              <option value="other">Autres</option>
+            </select>
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-bold">Prix</span>
+            <input class="form-control border-gray-300 focus:border-[#a1c617] focus:ring-0 border px-2 py-1 w-full rounded-md text-sm" type="number" name="price" step="50" min="0" placeholder="Prix (laisser vide si gratuit)" />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-bold">Ajoutez une affiche</span>
+            <input class="block w-full text-sm text-gray-500 file:mr-4 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-sm focus:ring-0 focus:border-none focus:outline-none file:bg-[#222e05] file:text-white hover:file:bg-[#4d6113]" type="file" name="poster" />
+          </label>
+
+          <div class="flex flex-row flex-nowrap gap-2 w-full justify-end items-center">
+            <div id="cancelModalBtn" class="px-3 py-2 rounded-full border border-[#222e05] text-[#4d6113] active:scale-95 duration-100 will-change cursor-pointer">
+              <span>Annuler</span>
+            </div>
+            <button type="submit" class="px-3 py-2 rounded-full border border-[#222e05] bg-[#222e05] active:scale-95 duration-100 will-change text-white cursor-pointer"><span>Ajouter</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

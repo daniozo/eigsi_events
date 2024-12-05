@@ -9,7 +9,7 @@ from langchain_core.prompts import PromptTemplate
 class RAGHandler:
     def __init__(self):
         self.llm = OllamaLLM(
-            model="llama3.2:3b",
+            model="qwen2.5:0.5b",
             # model="gemma2:2b",
             temperature=0.7,
             top_k=10,
@@ -22,6 +22,7 @@ class RAGHandler:
             model="paraphrase-multilingual"
         )
         self.vector_store = None
+    
 
         self.memory = ConversationBufferMemory(
             memory_key="chat_history",

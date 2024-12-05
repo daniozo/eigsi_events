@@ -3,12 +3,13 @@
 {% load socialaccount %}
     {% tailwind_css %}
 {#{% block content %}#}
-    <div id="loginModal"
-         class="flex items-center justify-center h-full w-full">
-        <div class="flex flex-col items-center justify-center h-auto overflow-hidden p-6 rounded-2xl bg-white shadow-2xl max-w-md">
-            <div class="p-6 sm:p-14 pt-0 sm:pt-0 flex flex-col gap-5">
-                <div class="text-center">
-                    <div class="text-xl md:text-2xl tracking-tight font-bold text-color font-display">Connexion</div>
+    <div class="flex items-center justify-center h-full w-full">
+        <div class="flex flex-col items-center justify-center h-auto overflow-hidden rounded-2xl bg-white shadow-2xl max-w-md">
+            <div class=" pt-0 sm:pt-0 flex flex-col">
+                <div class="text-xl md:text-2xl text-center tracking-tight font-bold text-color font-display">Connexion</div>
+                <div class="border-b flex flex-row w-full">
+                    {% comment %} <div class="flex-1 text-center py-1">Eigsi</div>
+                    <div class="flex-1 text-center py-1">Invité</div> {% endcomment %}
                 </div>
                 <div class="text-sm text-center text-gray-600">Utilisez votre compte @eigsica pour continuer</div>
                 <form action="{% provider_login_url 'google' %}" method="get">
@@ -27,7 +28,7 @@
                         <span>Se connecter avec Google</span>
                     </button>
                 </form>
-                <div>
+                {% comment %} <div> {% endcomment %}
                     {#                <div class="flex space-x-4 items-center my-6">#}
                     {#                    <hr class="border border-color-subtle flex-grow">#}
                     {#                    <div class="text-color-muted uppercase text-xs">ou</div>#}
@@ -43,7 +44,7 @@
                     {#                        <span>Continuer</span>#}
                     {#                    </button>#}
                     {#                </form>#}
-                </div>
+                {% comment %} </div> {% endcomment %}
             </div>
         </div>
     </div>

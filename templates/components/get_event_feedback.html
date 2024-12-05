@@ -1,13 +1,4 @@
-<div class="relative rounded-2xl bg-white p-6 shadow max-w-sm">
-    <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-gray-900">Votre avis compte</h2>
-        <button class="absolute right-5 top-5 cursor-pointer active:scale-75 duration-100 will-change ml-auto text-color-muted">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </button>
-    </div>
+<div class="rounded-2xl bg-white p-5 max-w-sm border">
     <p class="mb-4 text-center text-sm">Avez-vous participé à cet évènement ? Nous adorerons avoir votre avis.</p>
     <div class="mb-4 flex justify-center gap-2.5">
         <button id="rate1Btn" class="text-md rounded-lg px-2.5 py-1.5">😞
@@ -25,7 +16,7 @@
     {#            class="mb-3 w-full rounded-lg border border-gray-200 p-3 text-sm focus:outline-none resize-none"#}
     {#            rows="4" placeholder="Votre commentaire (facultatif)"></textarea>#}
     <button id="sendRateBtn"
-            class="w-full rounded-lg bg-[#222e05] py-2.5 text-sm font-medium text-white transition active:scale-95 duration-100 will-change disabled:active:scale-100 disabled:bg-gray-300" disabled>
+            class="w-full rounded-lg bg-[#222e05] py-2 text-sm font-medium text-white transition active:scale-95 duration-100 will-change disabled:active:scale-100 disabled:bg-gray-300" disabled>
         Envoyer
     </button>
 </div>

@@ -40,7 +40,7 @@
                             <path d="M16 18h.01"/>
                         </svg>
                     </div>
-                    <div class="flex flex-col gap-1">
+                    <div class="flex flex-col">
                         <span class="font-bold text-[#4d6113]">{{ event.date|date:"d F Y" }}</span>
                         <span>{{ event.date|time }}</span>
                     </div>
@@ -55,9 +55,25 @@
                             <circle cx="12" cy="10" r="3"/>
                         </svg>
                     </div>
-                    <div class="flex flex-col gap-1">
+                    <div class="flex flex-col">
                         <span class="font-bold text-[#4d6113]">Adresse</span>
                         <span>{{ event.location }}</span>
+                    </div>
+                </div>
+                <!-- Price -->
+                <div class="flex items-center space-x-1 gap-3">
+                    <div class="border rounded-md p-2 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-[#4d6113]">Prix</span>
+                        <span>
+                            {% if event.price and event.price != "" and event.price != "0" %}
+                                {{ event.price }}
+                            {% else %}
+                                Gratuit
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -241,7 +257,7 @@
             {% endif %}
             <!-- Gallery -->
             {% if not is_future_event and event.gallery.all|length > 0 %}
-                <section id="gallery-section" class="mt-8 w-full my-5 p-1 rounded-2xl border">
+                <section id="gallery-section" class="mt-8 w-full my-5 p-1 rounded-2xl border select-none">
                     <div class="flex flex-col gap-3 p-2 rounded-tl-xl rounded-tr-xl bg-[#eaf89e]">
                         <div class="text-sm font-bold text-gray-800">(Re)Vivez l'évènement</div>
                     </div>
@@ -337,54 +353,30 @@
                 </section>
             {% endif %}
             <!-- Event Description -->
-            <div class="mt-4 mb-10">
+            <div class="mt-5 mb-7">
                 <h2 class="text-base font-bold text-gray-800">Description</h2>
                 <p class="mt-2 text-left">{{ event.description }}</p>
             </div>
-            {% if not is_excessed_date and user.is_authenticated %}
-                {% include 'components/get_event_feedback.html' %}
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const rateButtons = document.querySelectorAll("[id^='rate']");
-                        const sendRateBtn = document.getElementById("sendRateBtn");
-
-                        let selectedRating = null;
-
-                        rateButtons.forEach((button, index) => {
-                            button.addEventListener("click", () => {
-                                rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
-                                button.classList.add("bg-[#c3e536]");
-                                selectedRating = index + 1;
-                                sendRateBtn.disabled = false;
-                            });
-                        });
-
-                        sendRateBtn.addEventListener("click", () => {
-                            if (!selectedRating) {
-                                alert("Veuillez sélectionner une note avant d'envoyer.");
-                                return;
-                            }
-
-                            fetch(`{% url 'base:rate_event' event.id %}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRFToken': '{{ csrf_token }}'
-                                },
-                                body: JSON.stringify({rate: selectedRating})
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    alert(data.response);
-                                    rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
-                                    selectedRating = null;
-                                })
-                                .catch(error => {
-                                    console.error("Erreur lors de l'envoi de la note :", error);
-                                });
-                        });
-                    })
-                </script>
+            <!-- Event Feedback -->
+            {% if not is_future_event and not is_excessed_date and user.is_authenticated %}
+                {% if participation.rating %}
+                <div class"mb-5 border p-4 flex justify-left">
+                    <h2 class="text-sm font-bold text-gray-800 mb-3">Votre avis sur l'évènement</h2>
+                    <div class="mb-4 flex justify-center gap-2.5 select-none w-fit">
+                        <span class="{% if participation.rating == 1 %} bg-[#c3e536] {% else %} text-md opacity-90 {% endif %} rounded-lg px-2.5 py-1.5">😞</span>
+                        <span class="{% if participation.rating == 2 %} bg-[#c3e536] {% else %} text-md opacity-90 {% endif %} rounded-lg px-2.5 py-1.5">😐</span>
+                        <span class="{% if participation.rating == 3 %} bg-[#c3e536] {% else %} text-md opacity-90 {% endif %} rounded-lg px-2.5 py-1.5">🙂</span>
+                        <span class="{% if participation.rating == 4 %} bg-[#c3e536] {% else %} text-md opacity-90 {% endif %} rounded-lg px-2.5 py-1.5">😊</span>
+                        <span class="{% if participation.rating == 5 %} bg-[#c3e536] {% else %} text-md opacity-90 {% endif %} rounded-lg px-2.5 py-1.5">😍</span>
+                    </div>
+                    {% comment %} {% include 'components/get_event_feedback.html' %} {% endcomment %}
+                </div>
+                {% else %}
+                    <div class"mb-5">
+                        <h2 class="text-base font-bold text-gray-800 mb-3">Votre avis compte</h2>
+                        {% include 'components/get_event_feedback.html' %}
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
         {% if is_future_event %}
@@ -444,6 +436,50 @@
     </div>
 {% endblock %}
 {% block script_tags %}
+{% if not is_future_event and not is_excessed_date and user.is_authenticated %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const rateButtons = document.querySelectorAll("[id^='rate']");
+            const sendRateBtn = document.getElementById("sendRateBtn");
+
+            let selectedRating = null;
+
+            rateButtons.forEach((button, index) => {
+                button.addEventListener("click", () => {
+                    rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
+                    button.classList.add("bg-[#c3e536]");
+                    selectedRating = index + 1;
+                    sendRateBtn.disabled = false;
+                });
+            });
+
+            sendRateBtn.addEventListener("click", () => {
+                if (!selectedRating) {
+                    alert("Veuillez sélectionner une note avant d'envoyer.");
+                    return;
+                }
+
+                fetch(`{% url 'base:rate_event' event.id %}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({rate: selectedRating})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.response);
+                        rateButtons.forEach(btn => btn.classList.remove("bg-[#c3e536]"));
+                        selectedRating = null;
+                    })
+                    .catch(error => {
+                        console.error("Erreur lors de l'envoi de la note :", error);
+                    });
+            });
+        })
+    </script>
+{% endif %}
     {% if is_future_event %}
         <script>
             const BUTTON_STATES = {

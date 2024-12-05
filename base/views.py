@@ -9,8 +9,7 @@ from dashboard.models import Event, Participation, Operation
 from dashboard.operation_types import OperationTypes
 from django.utils import timezone
 from datetime import timedelta
-
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 now = timezone.now()
 
@@ -35,13 +34,52 @@ def search(request):
         ('other', 'Autres'),
     ]
 
-    years = list(range(year, start - 1, -1))
-    events = Event.objects.filter(status=True, archived_at=None).order_by('date')
+    search = request.GET.get('search', '')
+    event_type_filter = request.GET.get('event_type', '')
+    accessibility = request.GET.get('accessibility', '')
+    year_filter = request.GET.get('year', '')
+    page = request.GET.get('page', 1)
+
+    events = Event.objects.filter(status=True, archived_at=None)
+
+    if search:
+        events = events.filter(title__icontains=search) | events.filter(description__icontains=search)
+
+    if event_type_filter:
+        events = events.filter(event_type=event_type_filter)
+
+    if accessibility:
+        is_public = accessibility == 'public'
+        events = events.filter(is_public=is_public)
+
+    if year_filter:
+        events = events.filter(date__year=year_filter)
+
+    events = events.order_by('date')
+    
+    paginator = Paginator(events, 12)
+    try:
+        events_page = paginator.page(page)
+    except PageNotAnInteger:
+        events_page = paginator.page(1)
+    except EmptyPage:
+        events_page = paginator.page(paginator.num_pages)
 
     has_events = len(events) != 0
+    years = list(range(year, start - 1, -1))
 
-    context = {'has_events': has_events, 'events': events, 'start': start, 'years': years,
-               'event_type': event_type}
+    context = {
+        'has_events': has_events,
+        'events': events_page,
+        'start': start,
+        'years': years,
+        'event_type': event_type,
+        'now': now,
+        'search': search,
+        'event_type_filter': event_type_filter,
+        'accessibility': accessibility,
+        'year_filter': year_filter
+    }
 
     return render(request, 'base/search.html', context)
 
@@ -135,6 +173,7 @@ def event_registration(request, event_id):
                 register_eigsi_member()
 
     return redirect('base:event_detail', event_id=event_id)
+
 
 @login_required
 def rate_event(request, event_id):
